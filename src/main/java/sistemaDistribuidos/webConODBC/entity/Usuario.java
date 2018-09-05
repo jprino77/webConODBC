@@ -4,6 +4,10 @@ import java.time.LocalDate;
 
 public class Usuario {
 
+	/**
+	 * atributo Objetoso y no primitivo, porque como es una entidad con campos 
+	 * nulleables al ser objetoso admite null
+	 */
 	private Integer numeroAfiliadoLegajo;
 	private String nombre;
 	private String calle;
