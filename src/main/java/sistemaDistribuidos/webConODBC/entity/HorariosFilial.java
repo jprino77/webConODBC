@@ -5,7 +5,7 @@ import java.time.LocalTime;
 public class HorariosFilial {
 
 	private Integer id;
-	private DiaSemana diaSemana;
+	private int diaSemana;
 	private LocalTime horaDesde;
 	private LocalTime hasta;
 	private Filial filial;
@@ -19,11 +19,11 @@ public class HorariosFilial {
 		this.id = id;
 	}
 
-	public DiaSemana getDiaSemana() {
+	public int getDiaSemana() {
 		return diaSemana;
 	}
 
-	public void setDiaSemana(DiaSemana diaSemana) {
+	public void setDiaSemana(int diaSemana) {
 		this.diaSemana = diaSemana;
 	}
 
