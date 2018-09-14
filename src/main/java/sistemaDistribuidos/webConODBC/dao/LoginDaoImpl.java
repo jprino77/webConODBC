@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 import sistemaDistribuidos.webConODBC.entity.Usuario;
@@ -14,6 +15,8 @@ import sistemaDistribuidos.webConODBC.entity.Usuario;
 @Repository
 public class LoginDaoImpl implements ILoginDao {
 
+	final static Logger logger = Logger.getLogger(LoginDaoImpl.class);
+	
 	private static final String getByUsuarioClave = "select * from usuario where usuario = ? and clave = ?";
 
 	@Override
@@ -22,13 +25,14 @@ public class LoginDaoImpl implements ILoginDao {
 
 		PreparedStatement statement = con.prepareStatement(getByUsuarioClave);
 		statement.setString(1, usuario);
-		statement.setString(2, usuario);
+		statement.setString(2, clave);
 
+		logger.info(statement.toString());
 		ResultSet rs = statement.executeQuery();
 
 		while (rs.next()) {
 			Usuario u = new Usuario();
-			u.setNumeroAfiliadoLegajo(rs.getInt("numero_afiliado_lgajo"));
+			u.setNumeroAfiliadoLegajo(rs.getInt("numero_afiliado_legajo"));
 			u.setNombre(rs.getString("nombre"));
 			u.setCalle(rs.getString("calle"));
 

@@ -6,7 +6,7 @@
 <html lang="es">
 
 <body>
-	numeroAfiliado: ${usuario.numeroAfiliado}
+	numeroAfiliado: ${usuario.numeroAfiliadoLegajo}
 	<br>
 	nombre: ${usuario.nombre}
 	<br>
