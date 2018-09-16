@@ -16,31 +16,42 @@
 
 package sistemaDistribuidos.webConODBC.controller;
 
-import java.util.Date;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
-import sistemaDistribuidos.webConODBC.entity.Usuario;
-import sistemaDistribuidos.webConODBC.service.ILoginService;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 @RequestMapping("/")
 public class LoginController {
 
-	@Autowired
-	ILoginService loginService;
-
-	
 	@RequestMapping(method=RequestMethod.GET)
-	public String init(Map<String, Object> model) {
-		Usuario u = loginService.getByUsuarioClave("prueba", "123");
-		model.put("usuario",u);
-		model.put("time", new Date());
-		return "login";
+	public RedirectView init(Map<String, Object> model) {
+		return new RedirectView("login");
 	}
+	
+	//Spring Security see this :
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	public String login(
+		@RequestParam(value = "error", required = false) String error,
+		@RequestParam(value = "logout", required = false) String logout,
+		Map<String, Object> model) {
+
+		if (error != null) {
+			model.put("error", "Usuario o Clave invalida");
+		}
+
+		if (logout != null) {
+			model.put("msg", "Deslogueado con exito");
+		}
+
+		return "login";
+
+	}
+	
+
 
 }

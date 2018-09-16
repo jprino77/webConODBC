@@ -8,5 +8,5 @@ import sistemaDistribuidos.webConODBC.entity.Usuario;
 
 public interface ILoginDao {
 
-	Usuario getByUsuarioClave(String usuario, String clave, Connection con) throws SQLException;
+	Usuario getByUsuario(String usuario, Connection con) throws SQLException;
 }
