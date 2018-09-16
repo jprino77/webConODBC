@@ -4,10 +4,10 @@
 <html>
 
 <head>
-<link href="webjars/bootstrap/3.3.6/css/bootstrap.min.css"
+<link href="http://localhost:8080/webjars/bootstrap/3.3.6/css/bootstrap.min.css"
 	rel="stylesheet">
 
-<link href="css/style.css" rel="stylesheet">
+<link href="http://localhost:8080/css/style.css" rel="stylesheet">
 
 </head>
 
@@ -34,9 +34,9 @@
 				class="col-xs-7 col-sm-3 col-md-3 sidebar sidebar-left sidebar-animate">
 				<ul class="nav navbar-stacked">
 					<li class="active"><a href="/inicio">Home</a></li>
-					<li><a href="/alta">Alquilar Cancha</a></li>
-					<li><a href="/bajaModificacion">Baja/Modificacionde alquiler</a></li>
+					<li><a href="/alquiler/altaAlquiler">Alquilar Cancha</a></li>
+					<li><a href="/alquiler/bajaModificacionAlquiler">Baja/Modificacionde alquiler</a></li>
 				</ul>
 			</div>
-			<div class="main col-md-9 col-md-offset-3">
+			<div class="main col-md-12">
 				
