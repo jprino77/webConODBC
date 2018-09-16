@@ -20,7 +20,6 @@
 	<div class="wrapper">
 		<div id="formContent">
 			<!-- Tabs Titles -->
-
 			<!-- Icon -->
 			<div class="first">
 				<h1>Club Los Amigos</h1>
@@ -42,9 +41,12 @@
 				action="<c:url value='j_spring_security_check' />" method='POST'>
 
 				<input type="text" id="login" class="second" name='usuario'
-					placeholder="usuario"> <input type="text" id="password"
-					class="third" name='clave' placeholder="clave"> <input
-					type="submit" class="fourth" value="Ingresar"> <input
+					placeholder="usuario" /> 
+				<input type="password" id="password"
+					class="third" name='clave' placeholder="clave" /> 
+				<input
+					type="submit" class="fourth" value="Ingresar" /> 
+				<input
 					type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 			</form>
 

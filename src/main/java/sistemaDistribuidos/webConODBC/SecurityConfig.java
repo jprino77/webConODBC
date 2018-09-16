@@ -28,7 +28,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers("/resources/**,/webjars/**");
+		web.ignoring().antMatchers("/css/**","js/**", "/webjars/**", "/static/**");
 	}
 
 	@Override
@@ -36,28 +36,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 		http.csrf().disable();
 
-		// The pages does not require login
-		http.authorizeRequests().antMatchers("/", "/login", "/logout").permitAll();
+		http.authorizeRequests().antMatchers("/").permitAll().anyRequest().authenticated().and().formLogin()
+				.loginPage("/login").permitAll().and().logout().permitAll();
 
-		// For ADMIN only.
-		http.authorizeRequests().antMatchers("/admin").access("hasRole('ROLE_ADMIN')");
-
-		// When the user has logged in as XX.
-		// But access a page that requires role YY,
-		// AccessDeniedException will be thrown.
 		http.authorizeRequests().and().exceptionHandling().accessDeniedPage("/403");
 
 		// Config for Login Form
 		http.authorizeRequests().and().formLogin()//
-				// Submit URL of login page.
-				.loginProcessingUrl("/j_spring_security_check") // Submit URL
-				.loginPage("/login")//
-				.defaultSuccessUrl("/inicio")//
+				.loginProcessingUrl("/j_spring_security_check").loginPage("/login").defaultSuccessUrl("/inicio")//
 				.failureUrl("/login?error=true")//
 				.usernameParameter("usuario")//
-				.passwordParameter("clave")
-				// Config for Logout Page
-				.and().logout().logoutUrl("/logout").logoutSuccessUrl("/login");
+				.passwordParameter("clave").and().logout().logoutUrl("/logout").logoutSuccessUrl("/login");
 
 	}
 }

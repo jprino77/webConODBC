@@ -52,6 +52,10 @@ public class LoginController {
 
 	}
 	
+	@RequestMapping(value = "/inicio", method = RequestMethod.GET)
+	public String inicio(Map<String, Object> model) {
+		return "inicio";
+	}
 
 
 }
