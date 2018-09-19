@@ -1,173 +1,127 @@
-/* Styles go here */
+/* The side navigation menu */
+.sidenav {
+    height: 100%; /* 100% Full-height */
+    width: 0; /* 0 width - change this with JavaScript */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Stay on top */
+    top: 0;
+    left: 0;
+    background-color: #f5f5f5;
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 60px; /* Place content 60px from the top */
+    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+}
+ #cerrar {
+ font-size: 25px;
+ }
+/* The navigation menu links */
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+background-color: #f5f5f5;
+    display: block;
+    transition: 0.3s
+}
+ 
+/* When you mouse over the navigation links, change their color */
+.sidenav a:hover, .offcanvas a:focus{
+    color: #f1f1f1;
+}
+ 
+/* Position and style the close button (top right corner) */
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    margin-left: 50px;
+}
+ 
+/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+#main {
+    transition: margin-left .5s;
+    padding: 20px;
+    overflow:hidden;
+    width:100%;
+}
 body {
-	padding-top: 51px;
+  overflow-x: hidden;
 }
-
-/* this is only to style the sidebar - you can make the sidebar look any way you want */
-.sidebar {
-	padding: 20px;
-	background-color: #f5f5f5;
-	border-right: 1px solid #eee;
+ 
+/* Add a black background color to the top navigation */
+.topnav {
+    background-color: #f5f5f5;
+    overflow: hidden;
 }
-
-/* All the default sidebar styles */
-/* toggle button settings */
-/* Note: this disables the navbar-toggle class's hide function. set visibility with the boostrap visible/hidden classes */
-/* Note: this also disables the navbar-header class positioning settings in small screens. */
-.navbar.navbar-static .navbar-header {
-	float: left;
+ 
+/* Style the links inside the navigation bar */
+.topnav a {
+    float: left;
+    display: block;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
 }
-
-.navbar .navbar-toggle.toggle-left {
-	float: left;
-	margin-left: 15px;
+ 
+/* Change the color of links on hover */
+.topnav a:hover {
+    background-color: #f5f5f5;
+    color: black;
 }
-
-.navbar .navbar-toggle.toggle-right {
-	float: right;
-	margin-right: 15px;
+ 
+/* Add a color to the active/current link */
+.topnav a.active {
+    background-color: #4CAF50;
+    color: white;
 }
-
-.navbar .navbar-toggle.toggle-sidebar, [data-toggle="sidebar"] {
-	display: block;
+ 
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
 }
-
-/* sidebar settings */
-.sidebar {
-	position: fixed;
-	display: block;
-	top: 51px;
-	bottom: 0;
-	z-index: 1000;
-	min-height: 100%;
-	max-height: none;
-	overflow: auto;
+ 
+a svg{
+  transition:all .5s ease;
+ 
+  &:hover{
+    #transform:rotate(180deg);
+  }
 }
-
-.sidebar-left {
-	left: 0;
+ 
+#ico{
+  display: none;
 }
-
-.sidebar-right {
-	right: 0;
-}
-
-/* css to override hiding the sidebar according to different screen sizes */
-.row .sidebar.sidebar-left.sidebar-xs-show {
-	left: 0;
-	-webkit-transform: translate(0, 0);
-	-ms-transform: translate(0, 0);
-	-o-transform: translate(0, 0);
-	-moz-transform: translate(0, 0);
-	transform: translate(0, 0);
-}
-
-/*right sidebar is untested */
-.row .sidebar.sidebar-right.sidebar-xs-show {
-	right: 0;
-	-webkit-transform: translate(0, 0);
-	-ms-transform: translate(0, 0);
-	-o-transform: translate(0, 0);
-	-moz-transform: translate(0, 0);
-	transform: translate(0, 0);
-}
-
-@media ( min-width : 768px) {
-	.row .sidebar.sidebar-left.sidebar-sm-show {
-		left: 0;
-		-webkit-transform: translate(0, 0);
-		-ms-transform: translate(0, 0);
-		-o-transform: translate(0, 0);
-		-moz-transform: translate(0, 0);
-		transform: translate(0, 0);
-	}
-
-	/*right sidebar is untested */
-	.row .sidebar.sidebar-right.sidebar-sm-show {
-		right: 0;
-		-webkit-transform: translate(0, 0);
-		-ms-transform: translate(0, 0);
-		-o-transform: translate(0, 0);
-		-moz-transform: translate(0, 0);
-		transform: translate(0, 0);
-	}
-}
-
-@media ( min-width : 992px) {
-	.row .sidebar.sidebar-left.sidebar-md-show {
-		left: 0;
-		-webkit-transform: translate(0, 0);
-		-ms-transform: translate(0, 0);
-		-o-transform: translate(0, 0);
-		-moz-transform: translate(0, 0);
-		transform: translate(0, 0);
-	}
-	.row .sidebar.sidebar-right.sidebar-md-show {
-		right: 0;
-		-webkit-transform: translate(0, 0);
-		-ms-transform: translate(0, 0);
-		-o-transform: translate(0, 0);
-		-moz-transform: translate(0, 0);
-		transform: translate(0, 0);
-	}
-}
-
-@media ( min-width : 1170px) {
-	.row .sidebar.sidebar-left.sidebar-lg-show {
-		left: 0;
-		-webkit-transform: translate(0, 0);
-		-moz-transform: translate(0, 0);
-		-ms-transform: translate(0, 0);
-		-o-transform: translate(0, 0);
-		transform: translate(0, 0);
-	}
-	.row .sidebar.sidebar-right.sidebar-lg-show {
-		right: 0;
-		-webkit-transform: translate(0, 0);
-		-moz-transform: translate(0, 0);
-		-ms-transform: translate(0, 0);
-		-o-transform: translate(0, 0);
-		transform: translate(0, 0);
-	}
-}
-
-/* animation class - optional: without it the sidebar would just pop in and out*/
-.sidebar-animate {
-	-webkit-transition: -webkit-transform 300ms ease;
-	-moz-transition: -moz-transform 300ms ease;
-	-o-transition: transform 300ms ease;
-	transition: transform 300ms ease;
-}
-
-/* Left panel positioning classes */
-.sidebar.sidebar-left {
-	-webkit-transform: translate(-100%, 0);
-	-moz-transform: translate(-100%, 0);
-	-ms-transform: translate(-100%, 0);
-	-o-transform: translate(-100%, 0);
-	transform: translate(-100%, 0);
-}
-
-.sidebar.sidebar-left.sidebar-open {
-	-webkit-transform: translate(0, 0);
-	-moz-transform: translate(0, 0);
-	-ms-transform: translate(0, 0);
-	-o-transform: translate(0, 0);
-	transform: translate(0, 0);
-}
-
-.sidebar.sidebar-right {
-	-webkit-transform: translate(100%, 0);
-	-moz-transform: translate(100%, 0);
-	-ms-transform: translate(100%, 0);
-	-o-transform: translate(100%, 0);
-	transform: translate(100%, 0);
-}
-
-.sidebar.sidebar-right.sidebar-open {
-	-webkit-transform: translate(0, 0);
-	-moz-transform: translate(0, 0);
-	-ms-transform: translate(0, 0);
-	-o-transform: translate(0, 0);
-	transform: translate(0, 0);
+ 
+.menu{
+  background: #000;
+  display: none;
+  padding: 5px;
+  width: 320px;
+  @include border-radius(5px);
+ 
+  #transition: all 0.5s ease;
+ 
+  a{
+    display: block;
+    color: #fff;
+    text-align: center;
+    padding: 10px 2px;
+    margin: 3px 0;
+    text-decoration: none;
+    background: #444;
+ 
+    &:nth-child(1){
+      margin-top: 0;
+      @include border-radius(3px 3px 0 0 );
+    }
+    &:nth-child(5){
+      margin-bottom: 0;
+      @include border-radius(0 0 3px 3px);
+    }
+ 
+    &:hover{
+      background: #555;
+    }
+  }
 }

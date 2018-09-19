@@ -8,35 +8,30 @@
 	rel="stylesheet">
 
 <link href="http://localhost:8080/css/style.css" rel="stylesheet">
+<link href="http://localhost:8080/webjars/datatables/1.10.19/css/jquery.dataTables.css" rel="stylesheet">
+
 
 </head>
 
 <body>
-	<!-- Fixed navbar -->
-	<div class="navbar navbar-static navbar-default navbar-fixed-top">
-		<div class="container-fluid">
-			<div class="navbar-header">
-			<button type="button" class="navbar-toggle toggle-left"
-				data-toggle="sidebar" data-target=".sidebar-left">
-				<span class="icon-bar"></span> <span class="icon-bar"></span> <span
-					class="icon-bar"></span>
-			</button>
-			<p class="navbar-brand">Menu</p>
-			</div>
 
-		</div>
-	</div>
 
-	<!-- Begin page content -->
-	<div class="container-fluid">
-		<div class="row">
-			<div
-				class="col-xs-7 col-sm-3 col-md-3 sidebar sidebar-left sidebar-animate">
-				<ul class="nav navbar-stacked">
-					<li class="active"><a href="/inicio">Home</a></li>
-					<li><a href="/alquiler/altaAlquiler">Alquilar Cancha</a></li>
-					<li><a href="/alquiler/bajaModificacionAlquiler">Baja/Modificacionde alquiler</a></li>
-				</ul>
-			</div>
-			<div class="main col-md-12">
+<div id="sideNavigation" class="sidenav">
+  <a id="cerrar" href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  <a href="/inicio">Home</a>
+  <a href="/alquiler/altaAlquiler">Alquilar Cancha</a>
+ <a href="/alquiler/bajaModificacionAlquiler">Baja/Modificacionde alquiler</a>
+</div>
+ 
+<nav class="topnav">
+  <a href="#" onclick="openNav()">
+    <svg width="30" height="30" id="icoOpen">
+        <path d="M0,5 30,5" stroke="#000" stroke-width="5"/>
+        <path d="M0,14 30,14" stroke="#000" stroke-width="5"/>
+        <path d="M0,23 30,23" stroke="#000" stroke-width="5"/>
+    </svg>
+  </a>
+</nav>
+ 
+<div id="main">
 				
