@@ -12,12 +12,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import sistemaDistribuidos.webConODBC.dao.IAbmAlquileresDao;
+import sistemaDistribuidos.webConODBC.entity.Deporte;
 import sistemaDistribuidos.webConODBC.entity.Filial;
 
 @Service
-public class AbmAlquileresImpl implements IAbmAlquilerService {
-	
-	final static Logger logger = Logger.getLogger(AbmAlquileresImpl.class);
+public class AbmAlquileresServiceImpl implements IAbmAlquilerService {
+
+	final static Logger logger = Logger.getLogger(AbmAlquileresServiceImpl.class);
 
 	// Se Obtiene del application.properties
 	@Value("${application.odbcDriver}")
@@ -32,6 +33,9 @@ public class AbmAlquileresImpl implements IAbmAlquilerService {
 
 	@Override
 	public List<Filial> buscarFiliales() {
+
+		logger.info("Inico buscarFiliales");
+
 		List<Filial> filial = new ArrayList<Filial>();
 		Connection con = null;
 		try {
@@ -61,6 +65,35 @@ public class AbmAlquileresImpl implements IAbmAlquilerService {
 			}
 		}
 		return filial;
+	}
+
+	@Override
+	public List<Deporte> buscarDeportesByFilialesId(int filialId) {
+		logger.info("Inico busqueda deportes filaiid: " + filialId);
+		List<Deporte> deporte = new ArrayList<Deporte>();
+		Connection con = null;
+		try {
+			Class.forName(odbcDriver);
+			con = DriverManager.getConnection(db);
+
+			deporte = abmDao.buscarDEporteByFilialId(filialId, con);
+
+		} catch (ClassNotFoundException e) {
+			logger.error("Eror al cargar driver");
+			e.printStackTrace();
+		} catch (SQLException e) {
+			logger.error("Eror al ejecutar query");
+			e.printStackTrace();
+		} finally {
+			try {
+				con.close();
+
+			} catch (SQLException e) {
+				logger.error("Eror al cerrar coneccion");
+				e.printStackTrace();
+			}
+		}
+		return deporte;
 	}
 
 }

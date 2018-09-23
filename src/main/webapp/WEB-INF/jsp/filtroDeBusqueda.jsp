@@ -4,19 +4,18 @@
 		<form:form class="form-inline" action="/alquiler/altaAlquiler" modelAttribute="busquedaForm">
 			<div class="form-group">
 			<form:label path="filial">Filial</form:label>
-            <form:select class="form-control" path="filial">
-                <form:option value="-" label="--Seleccionar--"/>
+            <form:select class="form-control" path="filial" id="filial">
+                <form:option value="0" label="--Seleccionar--"/>
                 <form:options items="${filialMap}" />
             </form:select>
 			</div>
 			<div class="form-group">
-				<label for="sel1">Email:</label> <select class="form-control"
-					id="sel1">
-					<option>1</option>
-					<option>2</option>
-					<option>3</option>
-					<option>4</option>
-				</select>
+				<label for="deporte">Deporte:</label> 
+
+            <form:select class="form-control" path="deporte" id="deporte" disabled="true">
+                <form:option value="0" label="--Seleccionar--"/>
+                <form:options items="${deporteMap}" />
+            </form:select>
 			</div>
 
 			<button class="btn btn-default">Submit</button>
