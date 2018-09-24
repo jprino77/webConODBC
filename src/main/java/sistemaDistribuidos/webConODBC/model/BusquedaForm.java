@@ -2,22 +2,22 @@ package sistemaDistribuidos.webConODBC.model;
 
 public class BusquedaForm {
 
-	private String filial;
-	private String deporte;
+	private Integer filial;
+	private Integer deporte;
 
-	public String getFilial() {
+	public Integer getFilial() {
 		return filial;
 	}
 
-	public void setFilial(String filial) {
+	public void setFilial(Integer filial) {
 		this.filial = filial;
 	}
 
-	public String getDeporte() {
+	public Integer getDeporte() {
 		return deporte;
 	}
 
-	public void setDeporte(String deporte) {
+	public void setDeporte(Integer deporte) {
 		this.deporte = deporte;
 	}
 
