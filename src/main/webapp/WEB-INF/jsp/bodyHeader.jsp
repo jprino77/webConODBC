@@ -9,7 +9,7 @@
 
 <link href="http://localhost:8080/css/style.css" rel="stylesheet">
 <link href="http://localhost:8080/webjars/datatables/1.10.19/css/jquery.dataTables.css" rel="stylesheet">
-
+<link href="http://localhost:8080/webjars/Eonasdan-bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
 
 </head>
 

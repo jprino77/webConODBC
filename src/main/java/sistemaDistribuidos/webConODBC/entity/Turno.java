@@ -2,11 +2,17 @@ package sistemaDistribuidos.webConODBC.entity;
 
 import java.time.LocalDateTime;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class Turno {
 
 	private Integer id;
 	private LocalDateTime fechaHoraSolicitud;
+	
+	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
 	private LocalDateTime fechaHoraDesde;
+	
+	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
 	private LocalDateTime fechaHoraHasta;
 	private Cancha cancha;
 	private Usuario usuario;

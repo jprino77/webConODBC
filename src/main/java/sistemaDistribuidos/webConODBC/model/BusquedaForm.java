@@ -4,6 +4,8 @@ public class BusquedaForm {
 
 	private Integer filial;
 	private Integer deporte;
+	private String fechaAlquiler;
+	private String horaInicio;
 
 	public Integer getFilial() {
 		return filial;
@@ -19,6 +21,22 @@ public class BusquedaForm {
 
 	public void setDeporte(Integer deporte) {
 		this.deporte = deporte;
+	}
+
+	public String getFechaAlquiler() {
+		return fechaAlquiler;
+	}
+
+	public void setFechaAlquiler(String fechaAlquiler) {
+		this.fechaAlquiler = fechaAlquiler;
+	}
+
+	public String getHoraInicio() {
+		return horaInicio;
+	}
+
+	public void setHoraInicio(String horaInicio) {
+		this.horaInicio = horaInicio;
 	}
 
 }

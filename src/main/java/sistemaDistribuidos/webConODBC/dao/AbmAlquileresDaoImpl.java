@@ -1,9 +1,11 @@
 package sistemaDistribuidos.webConODBC.dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +16,7 @@ import sistemaDistribuidos.webConODBC.entity.Cancha;
 import sistemaDistribuidos.webConODBC.entity.Deporte;
 import sistemaDistribuidos.webConODBC.entity.Filial;
 import sistemaDistribuidos.webConODBC.entity.TipoCancha;
+import sistemaDistribuidos.webConODBC.entity.Turno;
 
 @Repository
 public class AbmAlquileresDaoImpl implements IAbmAlquileresDao {
@@ -28,6 +31,9 @@ public class AbmAlquileresDaoImpl implements IAbmAlquileresDao {
 	private static final String getCanchaByDeperteAndFilial = "select ca.id as 'cancha_id', ca.codigo as 'cancha_codigo', tc.id as 'tipo_id', tc.descripcion as 'tipo_descripcion' from cancha ca "
 															  + "inner join tipo_cancha tc on tc.id= ca.tipo_cancha_id "
 															  + "where ca.filial_id = ? and ca.deporte_id = ?";
+	
+	private static final String insertTurno = "insert into turno (fecha_hora_solicitud, fecha_hora_desde, fecha_hora_hasta, cancha_id, usuario_id) values(?, ?, ?, ?,?)";
+	
 	@Override
 	public List<Filial> buscarFiliales(Connection con) throws SQLException {
 		List<Filial> filialList = new ArrayList<Filial>();
@@ -88,6 +94,21 @@ public class AbmAlquileresDaoImpl implements IAbmAlquileresDao {
 			canchaList.add(cancha);
 		}
 		return canchaList;
+	}
+
+	@Override
+	public void guardarTurno(Turno turno, Connection con) throws SQLException {
+		
+		PreparedStatement statement = con.prepareStatement(insertTurno);
+		                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+		statement.setDate(1, Date.valueOf(LocalDate.now()));
+		statement.setDate(2,  Date.valueOf(turno.getFechaHoraDesde().toLocalDate()));
+		statement.setDate(3,  Date.valueOf(turno.getFechaHoraHasta().toLocalDate()));
+		statement.setInt(4, turno.getCancha().getId());
+		statement.setInt(5, turno.getUsuario().getNumeroAfiliadoLegajo());
+
+		statement.execute();
+		
 	}
 
 }

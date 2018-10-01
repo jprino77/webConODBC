@@ -40,7 +40,6 @@ background-color: #f5f5f5;
 #main {
     transition: margin-left .5s;
     padding: 20px;
-    overflow:hidden;
     width:100%;
 }
 body {
@@ -124,4 +123,9 @@ a svg{
       background: #555;
     }
   }
+}
+
+
+th,td{
+	text-align: center;
 }

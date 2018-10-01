@@ -15,6 +15,8 @@ import sistemaDistribuidos.webConODBC.dao.IAbmAlquileresDao;
 import sistemaDistribuidos.webConODBC.entity.Cancha;
 import sistemaDistribuidos.webConODBC.entity.Deporte;
 import sistemaDistribuidos.webConODBC.entity.Filial;
+import sistemaDistribuidos.webConODBC.entity.Turno;
+import sistemaDistribuidos.webConODBC.entity.Usuario;
 
 @Service
 public class AbmAlquileresServiceImpl implements IAbmAlquilerService {
@@ -106,7 +108,7 @@ public class AbmAlquileresServiceImpl implements IAbmAlquilerService {
 			Class.forName(odbcDriver);
 			con = DriverManager.getConnection(db);
 
-			cancha = abmDao.buscarCanchaByDeporteAndFilial(filialId,deporteId, con);
+			cancha = abmDao.buscarCanchaByDeporteAndFilial(filialId, deporteId, con);
 
 		} catch (ClassNotFoundException e) {
 			logger.error("Eror al cargar driver");
@@ -124,6 +126,39 @@ public class AbmAlquileresServiceImpl implements IAbmAlquilerService {
 			}
 		}
 		return cancha;
+	}
+
+	@Override
+	public boolean guardarTurno(Turno turno, Usuario usuario) {
+		logger.info("inicio guardar Turno");
+		boolean exitoso = false;
+		
+		Connection con = null;
+		try {
+			Class.forName(odbcDriver);
+			con = DriverManager.getConnection(db);
+			turno.setUsuario(usuario);
+			abmDao.guardarTurno(turno, con);
+			exitoso = true;
+		} catch (ClassNotFoundException e) {
+			logger.error("Eror al cargar driver");
+			e.printStackTrace();
+		} catch (SQLException e) {
+			logger.error("Eror al ejecutar query");
+			e.printStackTrace();
+		} finally {
+			try {
+				con.close();
+
+			} catch (SQLException e) {
+				logger.error("Eror al cerrar coneccion");
+				e.printStackTrace();
+			}
+		}
+		
+		logger.info("fin guardar Turno");
+		return exitoso;
+
 	}
 
 }

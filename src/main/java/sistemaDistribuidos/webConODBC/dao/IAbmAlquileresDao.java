@@ -7,6 +7,7 @@ import java.util.List;
 import sistemaDistribuidos.webConODBC.entity.Cancha;
 import sistemaDistribuidos.webConODBC.entity.Deporte;
 import sistemaDistribuidos.webConODBC.entity.Filial;
+import sistemaDistribuidos.webConODBC.entity.Turno;
 
 public interface IAbmAlquileresDao {
 
@@ -15,4 +16,6 @@ public interface IAbmAlquileresDao {
 	List<Deporte> buscarDeporteByFilialId(int filialId, Connection con) throws SQLException;
 
 	List<Cancha> buscarCanchaByDeporteAndFilial(int filialId, int deporteId, Connection con) throws SQLException;
+
+	void guardarTurno(Turno turno, Connection con) throws SQLException;
 }

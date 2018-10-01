@@ -1,4 +1,6 @@
 $( function () {
+	
+	customDatePicker.init();	
     $('#table_id').DataTable();
     
     if($("#deporte").val() != "0"){
@@ -34,6 +36,32 @@ $( function () {
     	}
 
     })
+    
+       $('button[type=submit].alquilar').click(function(e) {
+    	   
+      //Prevent default submission of form
+        e.preventDefault();
+        var callButtonId = this.id;
+	    var formId = "form_"+this.id;
+	    $.ajax({
+	         url : '/alquiler/alquilar',
+	         method: "POST",
+	         data : $('#'+formId).serialize(),
+	         success : function(res) {
+	        	 $(".msg").html('');
+	        	 if(res == true){
+		        	 $(".msg").addClass("alert alert-success").append("<strong>Alquiler realizado con exito</strong>");
+		        	 $('#'+callButtonId).attr("disabled","disabled");
+	        	 }else{
+		        	 $(".msg").addClass("alert alert-danger").append("<strong>Error al realizar alquiler</strong>");
+	        	 }
+	         },
+	         error:function(res) {
+	        	 $(".msg").html('');
+	        	 $(".msg").addClass("alert alert-danger").append("<strong>Error al realizar alquiler</strong>");
+	         } 
+	      })
+       });
 
 } );
 
