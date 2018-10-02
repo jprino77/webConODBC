@@ -1,11 +1,11 @@
 package sistemaDistribuidos.webConODBC.dao;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -101,9 +101,9 @@ public class AbmAlquileresDaoImpl implements IAbmAlquileresDao {
 		
 		PreparedStatement statement = con.prepareStatement(insertTurno);
 		                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
-		statement.setDate(1, Date.valueOf(LocalDate.now()));
-		statement.setDate(2,  Date.valueOf(turno.getFechaHoraDesde().toLocalDate()));
-		statement.setDate(3,  Date.valueOf(turno.getFechaHoraHasta().toLocalDate()));
+		statement.setTimestamp(1, Timestamp.valueOf(LocalDateTime.now()));
+		statement.setTimestamp(2,  Timestamp.valueOf(turno.getFechaHoraDesde()));
+		statement.setTimestamp(3,  Timestamp.valueOf(turno.getFechaHoraHasta()));
 		statement.setInt(4, turno.getCancha().getId());
 		statement.setInt(5, turno.getUsuario().getNumeroAfiliadoLegajo());
 
