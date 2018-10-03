@@ -17,7 +17,7 @@ BEGIN
  where ca.filial_id = p_filial_id and ca.deporte_id = p_deporte
  and ca.id not in (select cancha_id from  turno tu
  where  ( p_fecha_desde between tu.fecha_hora_desde and tu.fecha_hora_hasta)
- or ( p_fecha_desde between tu.fecha_hora_desde and tu.fecha_hora_hasta)
+ or ( p_fecha_hasta between tu.fecha_hora_desde and tu.fecha_hora_hasta)
  or (tu.fecha_hora_desde between p_fecha_desde and p_fecha_hasta)
  or (tu.fecha_hora_hasta between p_fecha_desde and p_fecha_hasta) 
  and tu.cancelado = 0)
@@ -46,6 +46,9 @@ order by tu.fecha_hora_desde desc;
 END$$
 
 DELIMITER ;
+
+
+
 
 
 
