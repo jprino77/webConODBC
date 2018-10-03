@@ -62,6 +62,31 @@ $( function () {
 	         } 
 	      })
        });
+    
+    
+    $('button[type=submit].anular').click(function(e) {
+ 	   
+        //Prevent default submission of form
+          e.preventDefault();
+          var turnoId = this.id;
+  	    $.ajax({
+  	         url : '/alquiler/anular/'+turnoId,
+  	         method: "GET",
+  	         success : function(res) {
+  	        	 $(".msg").html('');
+  	        	 if(res == true){
+  		        	 $(".msg").addClass("alert alert-success").append("<strong>Anulaci&iacute;on realizada con exito</strong>");
+  		        	 $('#'+turnoId).css("display","none");
+  	        	 }else{
+  		        	 $(".msg").addClass("alert alert-danger").append("<strong>Error al realizar Anulaci&iacute;on</strong>");
+  	        	 }
+  	         },
+  	         error:function(res) {
+  	        	 $(".msg").html('');
+  	        	 $(".msg").addClass("alert alert-danger").append("<strong>Error al realizar Anulaci&iacute;on</strong>");
+  	         } 
+  	      })
+         });
 
 } );
 

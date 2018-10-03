@@ -4,6 +4,8 @@
 <html>
 
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
 <link href="http://localhost:8080/webjars/bootstrap/3.3.6/css/bootstrap.min.css"
 	rel="stylesheet">
 
@@ -30,8 +32,9 @@
         <path d="M0,14 30,14" stroke="#000" stroke-width="5"/>
         <path d="M0,23 30,23" stroke="#000" stroke-width="5"/>
     </svg>
-  </a>
+  </a> asdas
 </nav>
  
-<div id="main">
+
+<div id="main" class="container-fluid">
 				

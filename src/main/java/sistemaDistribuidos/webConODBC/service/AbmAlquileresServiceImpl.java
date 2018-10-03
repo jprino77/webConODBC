@@ -17,6 +17,7 @@ import sistemaDistribuidos.webConODBC.entity.Deporte;
 import sistemaDistribuidos.webConODBC.entity.Filial;
 import sistemaDistribuidos.webConODBC.entity.Turno;
 import sistemaDistribuidos.webConODBC.entity.Usuario;
+import sistemaDistribuidos.webConODBC.model.BusquedaForm;
 
 @Service
 public class AbmAlquileresServiceImpl implements IAbmAlquilerService {
@@ -100,15 +101,16 @@ public class AbmAlquileresServiceImpl implements IAbmAlquilerService {
 	}
 
 	@Override
-	public List<Cancha> buscarCanchaByDeporteAndFilial(int filialId, int deporteId) {
-		logger.info("Inico busqueda buscarCanchaByDeporteAndFilial filaiid: " + filialId + "deporteId" + deporteId);
+	public List<Cancha> buscarCanchasDisponibles(BusquedaForm form) {
+		logger.info("Inico busqueda buscarCanchasDisponibles filaiid: " + form.getFilial() + "deporteId"
+				+ form.getDeporte());
 		List<Cancha> cancha = new ArrayList<Cancha>();
 		Connection con = null;
 		try {
 			Class.forName(odbcDriver);
 			con = DriverManager.getConnection(db);
 
-			cancha = abmDao.buscarCanchaByDeporteAndFilial(filialId, deporteId, con);
+			cancha = abmDao.buscarCanchasDisponibles(form, con);
 
 		} catch (ClassNotFoundException e) {
 			logger.error("Eror al cargar driver");
@@ -132,7 +134,7 @@ public class AbmAlquileresServiceImpl implements IAbmAlquilerService {
 	public boolean guardarTurno(Turno turno, Usuario usuario) {
 		logger.info("inicio guardar Turno");
 		boolean exitoso = false;
-		
+
 		Connection con = null;
 		try {
 			Class.forName(odbcDriver);
@@ -155,10 +157,70 @@ public class AbmAlquileresServiceImpl implements IAbmAlquilerService {
 				e.printStackTrace();
 			}
 		}
-		
+
 		logger.info("fin guardar Turno");
 		return exitoso;
 
+	}
+
+	@Override
+	public List<Turno> getAlquileresUsuario(int usuarioId) {
+		logger.info("Inico busqueda getAlquileresUsuario usuarioId: " + usuarioId);
+		List<Turno> turno = new ArrayList<Turno>();
+		Connection con = null;
+		try {
+			Class.forName(odbcDriver);
+			con = DriverManager.getConnection(db);
+
+			turno = abmDao.getAlquileresUsuario(usuarioId, con);
+
+		} catch (ClassNotFoundException e) {
+			logger.error("Eror al cargar driver");
+			e.printStackTrace();
+		} catch (SQLException e) {
+			logger.error("Eror al ejecutar query");
+			e.printStackTrace();
+		} finally {
+			try {
+				con.close();
+
+			} catch (SQLException e) {
+				logger.error("Eror al cerrar coneccion");
+				e.printStackTrace();
+			}
+		}
+		return turno;
+	}
+
+	@Override
+	public boolean anularTurno(int turnoId) {
+		logger.info("inicio anularTurno Turno");
+		boolean exitoso = false;
+
+		Connection con = null;
+		try {
+			Class.forName(odbcDriver);
+			con = DriverManager.getConnection(db);
+			abmDao.anularTurno(turnoId, con);
+			exitoso = true;
+		} catch (ClassNotFoundException e) {
+			logger.error("Eror al cargar driver");
+			e.printStackTrace();
+		} catch (SQLException e) {
+			logger.error("Eror al ejecutar query");
+			e.printStackTrace();
+		} finally {
+			try {
+				con.close();
+
+			} catch (SQLException e) {
+				logger.error("Eror al cerrar coneccion");
+				e.printStackTrace();
+			}
+		}
+
+		logger.info("fin guardar Turno");
+		return exitoso;
 	}
 
 }

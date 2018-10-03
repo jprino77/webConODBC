@@ -7,16 +7,19 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class Turno {
 
 	private Integer id;
+	
 	private LocalDateTime fechaHoraSolicitud;
 	
-	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
 	private LocalDateTime fechaHoraDesde;
 	
-	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
 	private LocalDateTime fechaHoraHasta;
+	
 	private Cancha cancha;
 	private Usuario usuario;
 	private boolean cancelado;
+	private boolean puedeAnular;
 
 	public Integer getId() {
 		return id;
@@ -72,6 +75,14 @@ public class Turno {
 
 	public void setCancelado(boolean cancelado) {
 		this.cancelado = cancelado;
+	}
+
+	public boolean isPuedeAnular() {
+		return puedeAnular;
+	}
+
+	public void setPuedeAnular(boolean puedeAnular) {
+		this.puedeAnular = puedeAnular;
 	}
 
 }

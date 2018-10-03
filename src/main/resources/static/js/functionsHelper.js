@@ -9,7 +9,7 @@ customDatePicker = (function () {
 			});
 			
             $('.datetimepicker').datetimepicker({
-            	format: 'LT',
+            	format: 'HH:mm',
             	locale: 'es'
             });
 		}

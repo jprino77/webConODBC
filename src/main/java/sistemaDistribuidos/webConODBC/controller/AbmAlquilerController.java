@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,6 +21,7 @@ import sistemaDistribuidos.webConODBC.entity.Cancha;
 import sistemaDistribuidos.webConODBC.entity.Deporte;
 import sistemaDistribuidos.webConODBC.entity.Filial;
 import sistemaDistribuidos.webConODBC.entity.Turno;
+import sistemaDistribuidos.webConODBC.entity.Usuario;
 import sistemaDistribuidos.webConODBC.model.BusquedaForm;
 import sistemaDistribuidos.webConODBC.service.IAbmAlquilerService;
 import sistemaDistribuidos.webConODBC.service.ISecurityService;
@@ -30,10 +32,10 @@ public class AbmAlquilerController {
 
 	@Autowired
 	IAbmAlquilerService abmService;
-	
+
 	@Autowired
 	ISecurityService securityService;
-	
+
 	@ModelAttribute("busquedaForm")
 	public BusquedaForm initForm(Map<String, Object> model) {
 		BusquedaForm busquedaForm = new BusquedaForm();
@@ -47,13 +49,12 @@ public class AbmAlquilerController {
 
 		return busquedaForm;
 	}
-	
+
 	@ModelAttribute("turno")
 	public Turno initTurno(Map<String, Object> model) {
 
 		return new Turno();
 	}
-
 
 	@RequestMapping(value = "/buscarCanchas", method = RequestMethod.GET)
 	public String altaGet(Map<String, Object> model) {
@@ -61,16 +62,33 @@ public class AbmAlquilerController {
 	}
 
 	@RequestMapping(value = "/buscarCanchas", method = RequestMethod.POST)
-	public String buscarCanchas(Map<String, Object> model, @ModelAttribute("busquedaForm") BusquedaForm busquedaForm, HttpServletRequest request) {
-		List<Cancha> canchas = abmService.buscarCanchaByDeporteAndFilial(busquedaForm.getFilial(),
-				busquedaForm.getDeporte());
+	public String buscarCanchas(Map<String, Object> model, @ModelAttribute("busquedaForm") BusquedaForm busquedaForm,
+			HttpServletRequest request) {
+		List<Cancha> canchas = abmService.buscarCanchasDisponibles(busquedaForm);
 		model.put("canchas", canchas);
+
+		if (canchas.isEmpty()) {
+
+			model.put("msg", "No se encontraron Canchas disponibles en esa fecha y hora");
+		}
 		this.getDepotesByFilialIdMap(model, busquedaForm.getFilial());
 		return "altaAlquiler";
 	}
 
 	@RequestMapping(value = "/bajaModificacionAlquiler", method = RequestMethod.GET)
 	public String bajaModificacion(Map<String, Object> model) {
+		
+		Usuario u = securityService.getUsuarioLogeado();
+		
+		List<Turno> turnos = abmService.getAlquileresUsuario(u.getNumeroAfiliadoLegajo());
+		
+		if(turnos.isEmpty()) {
+			model.put("msg", "No se encontraron Alquileres para el usuario");
+
+		}else {
+			model.put("turnos",turnos);
+		}
+		
 		return "bajaModificacionAlquiler";
 	}
 
@@ -87,13 +105,23 @@ public class AbmAlquilerController {
 		return deportes;
 
 	}
-	
+
 	@RequestMapping(value = "/alquilar", method = RequestMethod.POST)
 	@ResponseBody
 	public boolean alquilar(HttpServletResponse response, Map<String, Object> model,
 			@ModelAttribute("turno") Turno turno) {
 
 		return abmService.guardarTurno(turno, securityService.getUsuarioLogeado());
+
+	}
+	
+	@RequestMapping(value = "/anular/{turnoId}", method = RequestMethod.GET)
+	@ResponseBody
+	public boolean alquilar(HttpServletResponse response, Map<String, Object> model,
+			@PathVariable("turnoId") int turnoId) {
+
+		
+		return abmService.anularTurno(turnoId);
 
 	}
 
