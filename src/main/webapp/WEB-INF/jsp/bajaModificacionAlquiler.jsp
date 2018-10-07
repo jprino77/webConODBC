@@ -122,6 +122,8 @@
 							<td align="center">
 
 									<div class="row">
+									
+									<input type="hidden" id="fechaHoraDesde_${turno.id}" name='cancha' value="${turno.fechaHoraDesde}" />
 										<input type="hidden" name='cancha' value="${turno.cancha.id}" /> 
 										<input type="hidden" id='filial_${turno.id}' value="${turno.cancha.filial.id}" /> 
 										<input type="hidden" id='deporte_${turno.id}' value="${turno.cancha.deporte.id}" />

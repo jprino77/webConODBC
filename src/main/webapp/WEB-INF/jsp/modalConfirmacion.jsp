@@ -24,12 +24,12 @@
 					<form:input id="filialHidden" path='filial' type='hidden' />
 					<form:input id="deporteHidden" path='deporte' type='hidden' />
 					<div class="row">
-						<div class="col-md-3">
+						<div class="col-md-4">
 							<div class="form-group">
-								<label for="fechaAlquiler">Fecha Alquiler:</label>
+								<label for="fechaAlquilerMod">Fecha Alquiler:</label>
 
 								<div class='input-group date'>
-									<form:input path='fechaAlquiler' type='text'
+									<form:input id="fechaAlquilerMod" path='fechaAlquiler' type='text'
 										class="form-control datepicker" />
 									<span class="input-group-addon"> <span
 										class="glyphicon glyphicon-th"></span>
@@ -37,7 +37,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-3">
+						<div class="col-md-4">
 							<div class="form-group">
 								<label for="horaInicio">Hora inicio:</label>
 								<div class='input-group date'>
@@ -49,7 +49,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-3">
+						<div class="col-md-4">
 							<div class="form-group">
 								<label for="horaFin">Hora fin:</label>
 								<div class='input-group date'>

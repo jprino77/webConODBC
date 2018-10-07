@@ -1,5 +1,6 @@
 package sistemaDistribuidos.webConODBC.controller;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import sistemaDistribuidos.webConODBC.entity.Cancha;
 import sistemaDistribuidos.webConODBC.entity.Deporte;
 import sistemaDistribuidos.webConODBC.entity.Filial;
+import sistemaDistribuidos.webConODBC.entity.HorariosFilial;
 import sistemaDistribuidos.webConODBC.entity.Turno;
 import sistemaDistribuidos.webConODBC.entity.Usuario;
 import sistemaDistribuidos.webConODBC.model.BusquedaForm;
@@ -116,6 +119,33 @@ public class AbmAlquilerController {
 		return deportes;
 
 	}
+	
+	@RequestMapping(value = "/diasFilial", method = RequestMethod.POST)
+	@ResponseBody
+	public List<Integer> getDiasFilial(HttpServletResponse response, Map<String, Object> model,
+			@RequestParam int filialId) {
+		
+		List<Integer> diasFilial = abmService.buscarDiasInhabilitadosByFilialId(filialId);
+
+
+		return diasFilial;
+
+	}
+	
+	@RequestMapping(value = "/horasFilial", method = RequestMethod.POST)
+	@ResponseBody
+	public HorariosFilial getHorasFilial(HttpServletResponse response, Map<String, Object> model,
+			@RequestParam int filialId, @RequestParam @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate fechaAlquiler) {
+		
+		HorariosFilial horariosFilial = abmService.buscarHorasFilialByFilialId(filialId, fechaAlquiler).get(0);
+
+
+		return horariosFilial;
+
+	}
+	
+	
+	
 
 	@RequestMapping(value = "/alquilar", method = RequestMethod.POST)
 	@ResponseBody

@@ -1,5 +1,6 @@
 package sistemaDistribuidos.webConODBC.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import sistemaDistribuidos.webConODBC.entity.Cancha;
@@ -24,7 +25,9 @@ public interface IAbmAlquilerService {
 	
 	List<Turno> getAlquileresUsuario(int usuarioId,  BusquedaForm busquedaForm);
 
-	List<HorariosFilial> buscarHorariosFilialByFilialId(int filialId);
+	List<Integer> buscarDiasInhabilitadosByFilialId(int filialId);
+
+	List<HorariosFilial> buscarHorasFilialByFilialId(int filialId, LocalDate fechaAlquiler);
 
 
 }

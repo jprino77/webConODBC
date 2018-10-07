@@ -2,6 +2,7 @@ package sistemaDistribuidos.webConODBC.dao;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 
 import sistemaDistribuidos.webConODBC.entity.Cancha;
@@ -25,5 +26,7 @@ public interface IAbmAlquileresDao {
 	
 	void anularTurno(int turnoId, Connection con) throws SQLException;
 
-	List<HorariosFilial> buscarHorariosFilialByFilialId(int filialId, Connection con) throws SQLException;
+	List<Integer> buscarDiasFilialByFilialId(int filialId, Connection con) throws SQLException;
+
+	List<HorariosFilial> buscarHorasFilialByFilialId(int filialId, LocalDate fechaAlquiler, Connection con) throws SQLException;
 }

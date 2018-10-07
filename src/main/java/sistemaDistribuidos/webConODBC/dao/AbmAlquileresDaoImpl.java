@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.sql.Types;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +33,7 @@ public class AbmAlquileresDaoImpl implements IAbmAlquileresDao {
 	private static final String getDeportesByFilialId = "select distinct de.id, de.descripcion from cancha ca "
 			+ " inner join deporte de on de.id = ca.deporte_id" + " where ca.filial_id =  ?";
 	
-	private static final String getHorariosFilial = "select dia_semana, hora_desde, hora_hasta from horarios_filial where filial_id = ?";
+	private static final String getHorariosFilialByFilialId = "select dia_semana, hora_desde, hora_hasta from horarios_filial where filial_id = ?";
 
 	private static final String getCanchasDisponibles = "call TRAER_CANCHAS_DISPONIBLES(?,?,?,?)";
 
@@ -81,23 +82,18 @@ public class AbmAlquileresDaoImpl implements IAbmAlquileresDao {
 	}
 	
 	@Override
-	public List<HorariosFilial> buscarHorariosFilialByFilialId(int filialId, Connection con) throws SQLException {
-		List<HorariosFilial> horarioFilialList = new ArrayList<HorariosFilial>();
+	public List<Integer> buscarDiasFilialByFilialId(int filialId, Connection con) throws SQLException {
+		List<Integer> diasFilialList = new ArrayList<Integer>();
 
-		PreparedStatement statement = con.prepareStatement(getHorariosFilial);
+		PreparedStatement statement = con.prepareStatement(getHorariosFilialByFilialId);
 		statement.setInt(1, filialId);
 		ResultSet rs = statement.executeQuery();
 
 		while (rs.next()) {
-			HorariosFilial horariosFilial = new HorariosFilial();
 
-			horariosFilial.setId(rs.getInt("dia_semana"));
-			horariosFilial.setHoraDesde(rs.getTime("hora_desde").toLocalTime());
-			horariosFilial.setHasta(rs.getTime("hora_hasta").toLocalTime());
-
-			horarioFilialList.add(horariosFilial);
+			diasFilialList.add(rs.getInt("dia_semana"));
 		}
-		return horarioFilialList;
+		return diasFilialList;
 	}
 
 	@Override
@@ -212,6 +208,38 @@ public class AbmAlquileresDaoImpl implements IAbmAlquileresDao {
 		statement.setInt(1, turnoId);
 		statement.executeUpdate();
 
+	}
+
+	@Override
+	public List<HorariosFilial> buscarHorasFilialByFilialId(int filialId,LocalDate fechaAlquiler, Connection con) throws SQLException {
+		List<HorariosFilial> horarioFilialList = new ArrayList<HorariosFilial>();
+		
+		int diaSemana = fechaAlquiler.getDayOfWeek().getValue();
+		
+		// El plugin del datepicker empieza a contar la semana desde el 0 (domingo) 
+		// por este motivo en la tabla horariosFilial tambien esta con 0 si abriera los domingos la filial
+		// mientras que LocalDate empieza a contar desde 1
+		if(diaSemana == 7) {
+			
+			diaSemana = 0;
+		}
+
+		PreparedStatement statement = con.prepareStatement(getHorariosFilialByFilialId + " and dia_semana= ?");
+		
+		statement.setInt(1, filialId);
+		statement.setInt(2, diaSemana);
+		
+		ResultSet rs = statement.executeQuery();
+
+		while (rs.next()) {
+			HorariosFilial horariosFilial = new HorariosFilial();
+
+			horariosFilial.setHoraDesde(rs.getTime("hora_desde").toLocalTime());
+			horariosFilial.setHasta(rs.getTime("hora_hasta").toLocalTime());
+
+			horarioFilialList.add(horariosFilial);
+		}
+		return horarioFilialList;
 	}
 
 }

@@ -17,7 +17,7 @@
 			</c:if>
 		</div>
 	</div>
-	<form:form action="/alquiler/buscarCanchas" modelAttribute="busquedaForm">
+	<form:form action="/alquiler/buscarCanchas" modelAttribute="busquedaForm" autocomplete="off">
 
 		<div class="row">
 			<div class="col-md-6">
@@ -86,7 +86,7 @@
 			<div class="col-md-offset-9 col-md-3">
 				<div class="form-group">
 						
-		<input class="form-control btn btn-primary" type="submit"
+		<input id="consultarAlquiler" class="form-control btn btn-primary" type="submit" disabled
 			value="Consultar">
 				</div>
 			</div>

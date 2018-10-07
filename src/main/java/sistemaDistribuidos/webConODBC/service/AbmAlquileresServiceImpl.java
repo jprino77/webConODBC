@@ -3,8 +3,11 @@ package sistemaDistribuidos.webConODBC.service;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,15 +105,32 @@ public class AbmAlquileresServiceImpl implements IAbmAlquilerService {
 	}
 
 	@Override
-	public List<HorariosFilial> buscarHorariosFilialByFilialId(int filialId) {
-		logger.info("Inico busqueda HorariosFilial filaiid: " + filialId);
-		List<HorariosFilial> horariosFilial = new ArrayList<HorariosFilial>();
+	public List<Integer> buscarDiasInhabilitadosByFilialId(int filialId) {
+		logger.info("Inico busqueda buscarDiasFilialByFilialId filaiid: " + filialId);
 		Connection con = null;
+		List<Integer> diasSemanaDisabled = new ArrayList<Integer>();
+		List<Integer> diasFilial;
 		try {
+
 			Class.forName(odbcDriver);
 			con = DriverManager.getConnection(db);
 
-			horariosFilial = abmDao.buscarHorariosFilialByFilialId(filialId, con);
+			diasFilial = abmDao.buscarDiasFilialByFilialId(filialId, con);
+
+			/**
+			 * Filtro los dias de semana que van a quedar inhabilitados en el calendario, en
+			 * los que la filial va a estar cerrada Por mantenimiento o porque no abre
+			 * 
+			 * 0 -> domingo
+			 * 1 -> Lunes
+			 * 2 -> Martes
+			 * 3 -> Miercoles
+			 * 4 -> Jueves
+			 * 5 -> viernes
+			 * 6 -> Sabado
+			 **/
+			diasSemanaDisabled = Stream.of(0, 1, 2, 3, 4, 5, 6).filter(dia -> !diasFilial.contains(dia))
+					.collect(Collectors.toList());
 
 		} catch (ClassNotFoundException e) {
 			logger.error("Eror al cargar driver");
@@ -127,7 +147,7 @@ public class AbmAlquileresServiceImpl implements IAbmAlquilerService {
 				e.printStackTrace();
 			}
 		}
-		return horariosFilial;
+		return diasSemanaDisabled;
 	}
 
 	@Override
@@ -194,7 +214,7 @@ public class AbmAlquileresServiceImpl implements IAbmAlquilerService {
 	}
 
 	@Override
-	public List<Turno> getAlquileresUsuario(int usuarioId,  BusquedaForm busquedaForm) {
+	public List<Turno> getAlquileresUsuario(int usuarioId, BusquedaForm busquedaForm) {
 		logger.info("Inico busqueda getAlquileresUsuario usuarioId: " + usuarioId);
 		List<Turno> turno = new ArrayList<Turno>();
 		Connection con = null;
@@ -251,6 +271,35 @@ public class AbmAlquileresServiceImpl implements IAbmAlquilerService {
 
 		logger.info("fin guardar Turno");
 		return exitoso;
+	}
+
+	@Override
+	public List<HorariosFilial> buscarHorasFilialByFilialId(int filialId, LocalDate fechaAlquiler) {
+		logger.info("Inico busqueda buscarHorasFilialByFilialId filialId: " + filialId);
+		List<HorariosFilial> horariosFilial = new ArrayList<HorariosFilial>();
+		Connection con = null;
+		try {
+			Class.forName(odbcDriver);
+			con = DriverManager.getConnection(db);
+
+			horariosFilial = abmDao.buscarHorasFilialByFilialId(filialId,fechaAlquiler, con);
+
+		} catch (ClassNotFoundException e) {
+			logger.error("Eror al cargar driver");
+			e.printStackTrace();
+		} catch (SQLException e) {
+			logger.error("Eror al ejecutar query");
+			e.printStackTrace();
+		} finally {
+			try {
+				con.close();
+
+			} catch (SQLException e) {
+				logger.error("Eror al cerrar coneccion");
+				e.printStackTrace();
+			}
+		}
+		return horariosFilial;
 	}
 
 }
