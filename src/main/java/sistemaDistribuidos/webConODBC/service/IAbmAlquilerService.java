@@ -5,6 +5,7 @@ import java.util.List;
 import sistemaDistribuidos.webConODBC.entity.Cancha;
 import sistemaDistribuidos.webConODBC.entity.Deporte;
 import sistemaDistribuidos.webConODBC.entity.Filial;
+import sistemaDistribuidos.webConODBC.entity.HorariosFilial;
 import sistemaDistribuidos.webConODBC.entity.Turno;
 import sistemaDistribuidos.webConODBC.entity.Usuario;
 import sistemaDistribuidos.webConODBC.model.BusquedaForm;
@@ -17,11 +18,13 @@ public interface IAbmAlquilerService {
 
 	List<Cancha> buscarCanchasDisponibles(BusquedaForm form);
 	
-	boolean guardarTurno(Turno turno, Usuario usuario);
+	boolean guardarOActualizarTurno(Turno turno, Usuario usuario);
 	
 	boolean anularTurno(int turnoId);
 	
-	List<Turno> getAlquileresUsuario(int usuarioId);
+	List<Turno> getAlquileresUsuario(int usuarioId,  BusquedaForm busquedaForm);
+
+	List<HorariosFilial> buscarHorariosFilialByFilialId(int filialId);
 
 
 }

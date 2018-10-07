@@ -2,13 +2,16 @@ package sistemaDistribuidos.webConODBC.entity;
 
 import java.time.LocalTime;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class HorariosFilial {
 
 	private Integer id;
 	private int diaSemana;
+	@DateTimeFormat(pattern = "HH:mm")
 	private LocalTime horaDesde;
+	@DateTimeFormat(pattern = "HH:mm")
 	private LocalTime hasta;
-	private Filial filial;
 	private boolean activo;
 
 	public Integer getId() {
@@ -41,14 +44,6 @@ public class HorariosFilial {
 
 	public void setHasta(LocalTime hasta) {
 		this.hasta = hasta;
-	}
-
-	public Filial getFilial() {
-		return filial;
-	}
-
-	public void setFilial(Filial filial) {
-		this.filial = filial;
 	}
 
 	public boolean isActivo() {

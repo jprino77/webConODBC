@@ -1,5 +1,7 @@
 package sistemaDistribuidos.webConODBC.entity;
 
+import java.util.List;
+
 public class Filial {
 
 	private Integer id;
@@ -8,6 +10,7 @@ public class Filial {
 	private String altura;
 	private Localidad localidad;
 	private String email;
+	private List<HorariosFilial> horariosFilials;
 	private boolean activo;
 
 	public Integer getId() {
@@ -64,6 +67,14 @@ public class Filial {
 
 	public void setActivo(boolean activo) {
 		this.activo = activo;
+	}
+
+	public List<HorariosFilial> getHorariosFilials() {
+		return horariosFilials;
+	}
+
+	public void setHorariosFilials(List<HorariosFilial> horariosFilials) {
+		this.horariosFilials = horariosFilials;
 	}
 
 }

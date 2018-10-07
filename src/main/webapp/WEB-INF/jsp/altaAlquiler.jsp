@@ -10,72 +10,89 @@
 			<div class="msg ajaxMsg"></div>
 		</div>
 		<div class="col-md-12">
-		<c:if test="${not empty msg}">
-			<div class=" alert alert-info">
-				<strong>${msg}</strong>
-			</div>
-		</c:if>
+			<c:if test="${not empty msg}">
+				<div class=" alert alert-info">
+					<strong>${msg}</strong>
+				</div>
+			</c:if>
 		</div>
 	</div>
-	<form:form action="/alquiler/buscarCanchas"
-		modelAttribute="busquedaForm">
+	<form:form action="/alquiler/buscarCanchas" modelAttribute="busquedaForm">
 
-		<%@ include file="../jsp/filtroDeBusqueda.jsp"%>
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					<form:label path="filial">Filial</form:label>
+					<form:select class="form-control" path="filial" id="filial">
+						<form:option value="0" label="--Seleccionar--" />
+						<form:options items="${filialMap}" />
+					</form:select>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					<label for="deporte">Deporte:</label>
+
+					<form:select class="form-control" path="deporte" id="deporte"
+						disabled="true">
+						<form:option value="0" label="--Seleccionar--" />
+						<form:options items="${deporteMap}" />
+					</form:select>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<label for="fechaAlquiler">Fecha Alquiler:</label>
+
+					<div class='input-group date'>
+						<form:input path='fechaAlquiler' type='text'
+							class="form-control datepicker" />
+						<span class="input-group-addon"> <span
+							class="glyphicon glyphicon-th"></span>
+						</span>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<label for="horaInicio">Hora inicio:</label>
+					<div class='input-group date'>
+						<form:input path='horaInicio' type='text'
+							class="form-control datetimepicker" />
+						<span class="input-group-addon"> <span
+							class="glyphicon glyphicon-time"></span>
+						</span>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<label for="horaFin">Hora fin:</label>
+					<div class='input-group date'>
+						<form:input path='horaFin' type='text'
+							class="form-control datetimepicker" />
+						<span class="input-group-addon"> <span
+							class="glyphicon glyphicon-time"></span>
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-offset-9 col-md-3">
+				<div class="form-group">
+						
+		<input class="form-control btn btn-primary" type="submit"
+			value="Consultar">
+				</div>
+			</div>
+		</div>
 	</form:form>
 
 </div>
-<c:if test="${fn:length(canchas) > 0}">
-
-
-
-	<div class="row">
-		<div class="col-md-12">
-
-			<table id="table_id" class="display">
-				<thead>
-					<tr>
-						<th>Cancha</th>
-						<th>Tipo de cancha</th>
-						<th>Seleccionar</th>
-					</tr>
-				</thead>
-				<tbody>
-					<c:forEach items="${canchas}" var="cancha">
-
-						<tr>
-
-							<td align="center"><c:out value="${cancha.codigo}"></c:out></td>
-							<td align="center"><c:out
-									value="${cancha.tipoCancha.descripcion}"></c:out></td>
-							<td align="center">
-
-								<div class="form-group">
-									<form:form id='form_${cancha.id}' class="form-inline"
-										action="/alquiler/alquilar" modelAttribute="turno"
-										method="POST">
-										<form:input path="fechaHoraDesde" type="hidden"
-											value="${busquedaForm.fechaAlquiler} ${busquedaForm.horaInicio}" />
-										<form:input path="fechaHoraHasta" type="hidden"
-											value="${busquedaForm.fechaAlquiler} ${busquedaForm.horaFin}" />
-										<form:input path="cancha.id" type="hidden"
-											value="${cancha.id}" />
-
-										<form:button class="form-control btn btn-primary alquilar"
-											type="submit" value="Alquilar" id='${cancha.id}'>Alquilar</form:button>
-									</form:form>
-								</div>
-
-							</td>
-
-						</tr>
-
-
-					</c:forEach>
-				</tbody>
-			</table>
-		</div>
-
-	</div>
-
-</c:if>
+<%@ include file="../jsp/datatableAlquiler.jsp"%>
 <%@ include file="../jsp/bodyFooter.jsp"%>

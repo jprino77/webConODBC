@@ -6,7 +6,72 @@
 
 <%@ include file="../jsp/bodyHeader.jsp"%>
 <div class="page-header">
-	<h1>Baja Modificaion Alquiler</h1>
+	<form:form action="/alquiler/bajaModificacionAlquiler" modelAttribute="busquedaForm">
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					<form:label path="filial">Filial</form:label>
+					<form:select class="form-control" path="filial" id="filial">
+						<form:option value="0" label="--Seleccionar--" />
+						<form:options items="${filialMap}" />
+					</form:select>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					<label for="deporte">Deporte:</label>
+
+					<form:select class="form-control" path="deporte" id="deporte"
+						disabled="true">
+						<form:option value="0" label="--Seleccionar--" />
+						<form:options items="${deporteMap}" />
+					</form:select>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<label for="fechaAlquiler">Fecha Alquiler:</label>
+
+					<div class='input-group date'>
+						<form:input path='fechaAlquiler' type='text'
+							class="form-control datepicker" />
+						<span class="input-group-addon"> <span
+							class="glyphicon glyphicon-th"></span>
+						</span>
+					</div>
+				</div>
+			</div>
+			
+			
+						<div class="col-md-3">
+				<div class="form-group">
+					<label for="fechaAlquilerHasta">Fecha Alquiler:</label>
+
+					<div class='input-group date'>
+						<form:input path='fechaAlquilerHasta' type='text'
+							class="form-control datepicker" />
+						<span class="input-group-addon"> <span
+							class="glyphicon glyphicon-th"></span>
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-offset-9 col-md-3">
+				<div class="form-group">
+						
+		<input class="form-control btn btn-primary" type="submit"
+			value="Consultar">
+				</div>
+			</div>
+		</div>
+	</form:form>
 </div>
 <div class="row">
 	<div class="col-md-12">
@@ -56,16 +121,25 @@
 
 							<td align="center">
 
-								<div class="form-group">
-									<input type="hidden" value="${turno.cancha.id}" /> <input
-										type="hidden" value="${turno.cancha.filial.id}" /> <input
-										type="hidden" value="${turno.cancha.deporte.id}" /> <input
-										type="hidden" value="${turno.id}" />
-									<c:if test="${turno.puedeAnular}">
-										<button class="form-control btn btn-danger anular"
-											type="submit" value="Anular" id='${turno.id}'>Anular</button>
-									</c:if>
-								</div>
+									<div class="row">
+										<input type="hidden" name='cancha' value="${turno.cancha.id}" /> 
+										<input type="hidden" id='filial_${turno.id}' value="${turno.cancha.filial.id}" /> 
+										<input type="hidden" id='deporte_${turno.id}' value="${turno.cancha.deporte.id}" />
+										<input type="hidden" value="${turno.id}" />
+										
+										<div class="col-md-6">
+
+											<button class="form-control btn btn-primary modificar"
+												value="Modificar" id='mod_${turno.id}' turno="${turno.id}"
+												data-toggle="modal" data-target="#myModal"
+												<c:if test="${!turno.puedeAnular}"> disabled </c:if>>Modificar</button>
+										</div>
+										<div class="col-md-6">
+											<button class="form-control btn btn-danger anular"
+												type="submit" value="Anular" id='${turno.id}'
+												<c:if test="${!turno.puedeAnular}"> disabled </c:if>>Anular</button>
+										</div>
+									</div>
 
 							</td>
 
@@ -80,4 +154,6 @@
 	</div>
 
 </c:if>
+<%@ include file="../jsp/modalConfirmacion.jsp"%>
+
 <%@ include file="../jsp/bodyFooter.jsp"%>

@@ -57,37 +57,48 @@ public class AbmAlquilerController {
 	}
 
 	@RequestMapping(value = "/buscarCanchas", method = RequestMethod.GET)
-	public String altaGet(Map<String, Object> model) {
+	public String buscarCanchasGet(Map<String, Object> model) {
 		return "altaAlquiler";
 	}
 
 	@RequestMapping(value = "/buscarCanchas", method = RequestMethod.POST)
-	public String buscarCanchas(Map<String, Object> model, @ModelAttribute("busquedaForm") BusquedaForm busquedaForm,
+	public String buscarCanchasPost(Map<String, Object> model, @ModelAttribute("busquedaForm") BusquedaForm busquedaForm,
 			HttpServletRequest request) {
-		List<Cancha> canchas = abmService.buscarCanchasDisponibles(busquedaForm);
-		model.put("canchas", canchas);
-
-		if (canchas.isEmpty()) {
-
-			model.put("msg", "No se encontraron Canchas disponibles en esa fecha y hora");
-		}
+		this.getCanchas(model, busquedaForm,false);
 		this.getDepotesByFilialIdMap(model, busquedaForm.getFilial());
 		return "altaAlquiler";
 	}
+	
+	@RequestMapping(value = "/buscarCanchasMod", method = RequestMethod.POST)
+	public String buscarCanchasModPost(Map<String, Object> model, @ModelAttribute("busquedaForm") BusquedaForm busquedaForm,
+			HttpServletRequest request) {
+		this.getCanchas(model, busquedaForm,true);
+		return "datatableAlquiler";
+	}
 
 	@RequestMapping(value = "/bajaModificacionAlquiler", method = RequestMethod.GET)
-	public String bajaModificacion(Map<String, Object> model) {
-		
+	public String bajaModificacionGet(Map<String, Object> model) {
+
+
+		return "bajaModificacionAlquiler";
+	}
+	
+	
+	@RequestMapping(value = "/bajaModificacionAlquiler", method = RequestMethod.POST)
+	public String bajaModificacionPost(Map<String, Object> model, @ModelAttribute("busquedaForm") BusquedaForm busquedaForm,
+			HttpServletRequest request) {
+
 		Usuario u = securityService.getUsuarioLogeado();
-		
-		List<Turno> turnos = abmService.getAlquileresUsuario(u.getNumeroAfiliadoLegajo());
-		
-		if(turnos.isEmpty()) {
+
+		List<Turno> turnos = abmService.getAlquileresUsuario(u.getNumeroAfiliadoLegajo(),busquedaForm);
+
+		if (turnos.isEmpty()) {
 			model.put("msg", "No se encontraron Alquileres para el usuario");
 
-		}else {
-			model.put("turnos",turnos);
+		} else {
+			model.put("turnos", turnos);
 		}
+		this.getDepotesByFilialIdMap(model, busquedaForm.getFilial());
 		
 		return "bajaModificacionAlquiler";
 	}
@@ -111,17 +122,28 @@ public class AbmAlquilerController {
 	public boolean alquilar(HttpServletResponse response, Map<String, Object> model,
 			@ModelAttribute("turno") Turno turno) {
 
-		return abmService.guardarTurno(turno, securityService.getUsuarioLogeado());
+		return abmService.guardarOActualizarTurno(turno, securityService.getUsuarioLogeado());
 
 	}
-	
+
 	@RequestMapping(value = "/anular/{turnoId}", method = RequestMethod.GET)
 	@ResponseBody
 	public boolean alquilar(HttpServletResponse response, Map<String, Object> model,
 			@PathVariable("turnoId") int turnoId) {
 
-		
 		return abmService.anularTurno(turnoId);
+
+	}
+
+	private void getCanchas(Map<String, Object> model, BusquedaForm busquedaForm, boolean esModificacion) {
+		List<Cancha> canchas = abmService.buscarCanchasDisponibles(busquedaForm);
+		model.put("canchas", canchas);
+		model.put("esModificacion", esModificacion);
+
+		if (canchas.isEmpty()) {
+
+			model.put("msg", "No se encontraron Canchas disponibles en esa fecha y hora");
+		}
 
 	}
 

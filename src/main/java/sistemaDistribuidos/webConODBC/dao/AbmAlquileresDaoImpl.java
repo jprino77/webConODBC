@@ -2,10 +2,12 @@ package sistemaDistribuidos.webConODBC.dao;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.sql.Types;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Repository;
 import sistemaDistribuidos.webConODBC.entity.Cancha;
 import sistemaDistribuidos.webConODBC.entity.Deporte;
 import sistemaDistribuidos.webConODBC.entity.Filial;
+import sistemaDistribuidos.webConODBC.entity.HorariosFilial;
 import sistemaDistribuidos.webConODBC.entity.TipoCancha;
 import sistemaDistribuidos.webConODBC.entity.Turno;
 import sistemaDistribuidos.webConODBC.model.BusquedaForm;
@@ -28,10 +31,12 @@ public class AbmAlquileresDaoImpl implements IAbmAlquileresDao {
 
 	private static final String getDeportesByFilialId = "select distinct de.id, de.descripcion from cancha ca "
 			+ " inner join deporte de on de.id = ca.deporte_id" + " where ca.filial_id =  ?";
+	
+	private static final String getHorariosFilial = "select dia_semana, hora_desde, hora_hasta from horarios_filial where filial_id = ?";
 
 	private static final String getCanchasDisponibles = "call TRAER_CANCHAS_DISPONIBLES(?,?,?,?)";
 
-	private static final String getAlquileresUsuario = "call TRAER_ALQUILERES_USUARIO(?)";
+	private static final String getAlquileresUsuario = "call TRAER_ALQUILERES_USUARIO(?, ?, ?, ?, ?)";
 
 	private static final String insertTurno = "insert into turno (fecha_hora_solicitud, fecha_hora_desde, fecha_hora_hasta, cancha_id, usuario_id) values(?, ?, ?, ?,?)";
 
@@ -74,6 +79,26 @@ public class AbmAlquileresDaoImpl implements IAbmAlquileresDao {
 		}
 		return deporteList;
 	}
+	
+	@Override
+	public List<HorariosFilial> buscarHorariosFilialByFilialId(int filialId, Connection con) throws SQLException {
+		List<HorariosFilial> horarioFilialList = new ArrayList<HorariosFilial>();
+
+		PreparedStatement statement = con.prepareStatement(getHorariosFilial);
+		statement.setInt(1, filialId);
+		ResultSet rs = statement.executeQuery();
+
+		while (rs.next()) {
+			HorariosFilial horariosFilial = new HorariosFilial();
+
+			horariosFilial.setId(rs.getInt("dia_semana"));
+			horariosFilial.setHoraDesde(rs.getTime("hora_desde").toLocalTime());
+			horariosFilial.setHasta(rs.getTime("hora_hasta").toLocalTime());
+
+			horarioFilialList.add(horariosFilial);
+		}
+		return horarioFilialList;
+	}
 
 	@Override
 	public List<Cancha> buscarCanchasDisponibles(BusquedaForm form, Connection con) throws SQLException {
@@ -103,7 +128,7 @@ public class AbmAlquileresDaoImpl implements IAbmAlquileresDao {
 	}
 
 	@Override
-	public void guardarTurno(Turno turno, Connection con) throws SQLException {
+	public void guardarOActualizarTurno(Turno turno, Connection con) throws SQLException {
 
 		PreparedStatement statement = con.prepareStatement(insertTurno);
 
@@ -118,12 +143,34 @@ public class AbmAlquileresDaoImpl implements IAbmAlquileresDao {
 	}
 
 	@Override
-	public List<Turno> getAlquileresUsuario(int usuarioId, Connection con) throws SQLException {
+	public List<Turno> getAlquileresUsuario(int usuarioId, BusquedaForm busquedaForm, Connection con) throws SQLException {
 		List<Turno> turnoList = new ArrayList<Turno>();
 
 		CallableStatement statement = con.prepareCall(getAlquileresUsuario);
 		statement.setInt(1, usuarioId);
-
+		
+		if(busquedaForm.getFilial() != 0 && busquedaForm.getFilial() != null ) {
+			statement.setInt(2, busquedaForm.getFilial());
+		}else {
+			statement.setNull(2, Types.INTEGER);
+		}
+		
+		
+		if(busquedaForm.getDeporte() != null ) {
+			statement.setInt(3, busquedaForm.getDeporte());
+		}else {
+			statement.setNull(3, Types.INTEGER);
+		}
+		
+		if(busquedaForm.getFechaAlquiler() != null && busquedaForm.getFechaAlquilerHasta() != null) {
+			statement.setDate(4, Date.valueOf(busquedaForm.getFechaAlquiler()));
+			statement.setDate(5, Date.valueOf(busquedaForm.getFechaAlquilerHasta()));
+		}else {
+			statement.setNull(4, Types.DATE);
+			statement.setNull(5, Types.DATE);
+		}
+		
+		
 		ResultSet rs = statement.executeQuery();
 
 		while (rs.next()) {

@@ -20,7 +20,8 @@ public class Turno {
 	private Usuario usuario;
 	private boolean cancelado;
 	private boolean puedeAnular;
-
+	private boolean esModificacion;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -83,6 +84,14 @@ public class Turno {
 
 	public void setPuedeAnular(boolean puedeAnular) {
 		this.puedeAnular = puedeAnular;
+	}
+
+	public boolean getEsModificacion() {
+		return esModificacion;
+	}
+
+	public void setEsModificacion(boolean esModificacion) {
+		this.esModificacion = esModificacion;
 	}
 
 }

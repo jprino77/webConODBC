@@ -2,6 +2,9 @@ $( function () {
 	
 	customDatePicker.init();	
     $('#table_id').DataTable();
+    $('#tableCanchas').DataTable();
+
+    
     
     if($("#deporte").val() != "0"){
     	$("#deporte").removeAttr("disabled");
@@ -87,6 +90,34 @@ $( function () {
   	         } 
   	      })
          });
+    
+    	$("button.modificar").click(function(e){
+    		e.preventDefault();
+    		var filial  = $('#filial_'+this.getAttribute("turno")).val();
+    		var deporte = $('#deporte_'+this.getAttribute("turno")).val();
+    		
+    		$("#filialHidden").val(filial);
+    		$("#deporteHidden").val(deporte);
+    		 
+    	})
+    
+	    $("#consultarMod").click(function(e){
+	    	
+	    	 e.preventDefault();
+	        $.post( "/alquiler/buscarCanchasMod", 
+	        		$("#buscarcanchasMod").serialize(),
+	        		function(data){ $("#resultado").html(data); 
+	        		$('#tableCanchas').DataTable();
+	        		
+	        });
+	    	
+	    });
+    	
+    	$("#myModal").on("hidden.bs.modal", function () {
+    		 $("#resultado").html(""); 
+    	});
+    
+
 
 } );
 

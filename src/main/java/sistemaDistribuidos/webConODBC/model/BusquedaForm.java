@@ -10,10 +10,13 @@ public class BusquedaForm {
 
 	private Integer filial;
 	private Integer deporte;
-	
+
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private LocalDate fechaAlquiler;
-	
+
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	private LocalDate fechaAlquilerHasta;
+
 	@DateTimeFormat(pattern = "HH:mm")
 	private LocalTime horaInicio;
 
@@ -60,10 +63,18 @@ public class BusquedaForm {
 		this.horaFin = horaFin;
 	}
 
+	public LocalDate getFechaAlquilerHasta() {
+		return fechaAlquilerHasta;
+	}
+
+	public void setFechaAlquilerHasta(LocalDate fechaAlquilerHasta) {
+		this.fechaAlquilerHasta = fechaAlquilerHasta;
+	}
+
 	public LocalDateTime getFechahoraInicio() {
 		return LocalDateTime.of(this.fechaAlquiler, this.horaInicio);
 	}
-	
+
 	public LocalDateTime getFechahoraFin() {
 		return LocalDateTime.of(this.fechaAlquiler, this.horaFin);
 	}

@@ -25,27 +25,54 @@ BEGIN
 END$$
 
 DELIMITER ;
-
 USE `db_los_amigos`;
 DROP procedure IF EXISTS `TRAER_ALQUILERES_USUARIO`;
 
 DELIMITER $$
 USE `db_los_amigos`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `TRAER_ALQUILERES_USUARIO`(IN p_usuario_id int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `TRAER_ALQUILERES_USUARIO`(IN p_usuario_id int, IN p_filial_id int, IN p_deporte_id int,IN p_fecha_alquiler_desde date, IN p_fecha_alquiler_hasta date)
     COMMENT 'Trae las canchas alquiladas por el usuario'
 BEGIN
-select ca.codigo as 'cancha_codigo', tc.descripcion as 'tipo_cancha_descripcion', de.descripcion as 'deporte_descripcion', tu.fecha_hora_desde as 'fecha_hora_desde', tu.fecha_hora_hasta as 'fecha_hora_hasta' , 
+
+set @usuario = concat(' where tu.usuario_id = ',QUOTE(p_usuario_id), ' and tu.cancelado = 0 ');
+
+	IF p_filial_id is not NULL THEN
+		set @filial = CONCAT (' and ca.filial_id = ', QUOTE(p_filial_id));
+	ELSE
+		set @filial = ' ';
+	END IF;
+
+	IF p_deporte_id is not NULL THEN
+		set @deporte = CONCAT (' and de.id = ', QUOTE(p_deporte_id));
+	ELSE
+		set @deporte = ' ';
+	END IF;
+
+	IF (p_fecha_alquiler_desde is not NULL) THEN
+		set @fecha_alquiler = CONCAT (' and CAST(tu.fecha_hora_desde AS DATE) between ', QUOTE(p_fecha_alquiler_desde), ' and ', QUOTE(p_fecha_alquiler_hasta));
+	ELSE
+		set @fecha_alquiler = ' ';
+	END IF;
+
+
+set @querys = CONCAT ('select ca.codigo as cancha_codigo, tc.descripcion as tipo_cancha_descripcion, de.descripcion as deporte_descripcion, tu.fecha_hora_desde as fecha_hora_desde, tu.fecha_hora_hasta as fecha_hora_hasta , 
 case 
  when TIMESTAMPDIFF(minute,now(),tu.fecha_hora_desde) > 120 then true 
- else false end as 'puede_anular',tu.id as 'turno_id', ca.deporte_id as 'deporte_id', ca.id as 'cancha_id',ca.filial_id as 'filial_id' from turno tu
+ else false end as puede_anular,tu.id as turno_id, ca.deporte_id as deporte_id, ca.id as cancha_id,ca.filial_id as filial_id from turno tu
 inner join cancha ca on ca.id = tu.cancha_id
 inner join deporte de on de.id = ca.deporte_id
-inner join tipo_cancha tc on tc.id = ca.tipo_cancha_id
-where tu.usuario_id = p_usuario_id and tu.cancelado = 0
-order by tu.fecha_hora_desde desc;
+inner join tipo_cancha tc on tc.id = ca.tipo_cancha_id', @usuario, @filial, @deporte, @fecha_alquiler, ' order by tu.fecha_hora_desde desc');
+
+    PREPARE stmt FROM @querys;
+    EXECUTE stmt;
 END$$
 
 DELIMITER ;
+
+
+
+
+
 
 
 
