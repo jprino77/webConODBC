@@ -8,19 +8,10 @@
 		<!-- Modal content-->
 		<div class="modal-content">
 			<div class="modal-header">
-				<div class="row">
-					<div class="col-md-12">
-						<div class="msg ajaxMsg"></div>
-					</div>
-					<div class="col-md-12">
-						<c:if test="${not empty msg}">
-							<div class=" alert alert-info">
-								<strong>${msg}</strong>
-							</div>
-						</c:if>
-					</div>
-				</div>
-				<form:form id="buscarcanchasMod" modelAttribute="busquedaForm">
+
+				<form:form id="buscarcanchasMod" modelAttribute="busquedaForm" autocomplete="off">
+				
+					<input id="turnoHidden" id='turnoId' type='hidden' />
 					<form:input id="filialHidden" path='filial' type='hidden' />
 					<form:input id="deporteHidden" path='deporte' type='hidden' />
 					<div class="row">
@@ -30,7 +21,7 @@
 
 								<div class='input-group date'>
 									<form:input id="fechaAlquilerMod" path='fechaAlquiler' type='text'
-										class="form-control datepicker" />
+										class="form-control datepicker" onkeydown="return false"/>
 									<span class="input-group-addon"> <span
 										class="glyphicon glyphicon-th"></span>
 									</span>
@@ -39,10 +30,10 @@
 						</div>
 						<div class="col-md-4">
 							<div class="form-group">
-								<label for="horaInicio">Hora inicio:</label>
+								<label for="horaInicioMod">Hora inicio:</label>
 								<div class='input-group date'>
-									<form:input path='horaInicio' type='text'
-										class="form-control datetimepicker" />
+									<form:input id="horaInicioMod" path='horaInicio' type='text'
+										class="form-control datetimepicker" onkeydown="return false"/>
 									<span class="input-group-addon"> <span
 										class="glyphicon glyphicon-time"></span>
 									</span>
@@ -53,8 +44,8 @@
 							<div class="form-group">
 								<label for="horaFin">Hora fin:</label>
 								<div class='input-group date'>
-									<form:input path='horaFin' type='text'
-										class="form-control datetimepicker" />
+									<form:input id= "horaFinMod" path='horaFin' type='text'
+										class="form-control datetimepicker" onkeydown="return false" />
 									<span class="input-group-addon"> <span
 										class="glyphicon glyphicon-time"></span>
 									</span>
@@ -65,8 +56,8 @@
 					<div class="row">
 						<div class="col-md-offset-9 col-md-3">
 							<div class="form-group">
-								<input class="form-control btn btn-primary" id="consultarMod" type="button"
-									value="Consultar">
+								<button class="form-control btn btn-primary" id="consultarMod" type="submit"
+									value="Consultar">Consultar</button>
 							</div>
 						</div>
 					</div>

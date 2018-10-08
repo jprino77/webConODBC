@@ -4,10 +4,18 @@ var ajaxCalls = ajaxCalls || {}
 customDatePicker = (function () {
 		var init= function(){
 			
-			$('.datepicker').datetimepicker({
+			$('#fechaAlquilerDesde.datepicker, #fechaAlquilerHasta.datepicker').datetimepicker({
 				format: 'DD/MM/YYYY',
 			    locale: 'es',
-			    useCurrent: false
+			    useCurrent: false,
+			});
+			
+			$("#fechaAlquiler, #fechaAlquilerMod").datetimepicker({
+				format: 'DD/MM/YYYY',
+			    locale: 'es',
+			    useCurrent: false,
+			    minDate: moment(),
+			    
 			});
 			
             $('.datetimepicker').datetimepicker({
@@ -97,14 +105,32 @@ ajaxCalls = (function(){
       		
       		dateInicio.setHours(horaInicio,minutoInicio)
       		dateFin.setHours(horaFin,minutoFin)
-      		$('#horaInicio').data("DateTimePicker").minDate(dateInicio).format("HH:mm");
-      		$('#horaInicio').data("DateTimePicker").maxDate(dateFin).format("HH:mm");
       		
-      		$('#horaFin').data("DateTimePicker").minDate(dateInicio).format("HH:mm");
-      		$('#horaFin').data("DateTimePicker").maxDate(dateFin).format("HH:mm");
+      		//Cuando esta en vista de alta
+      		if($('#horaInicio').length){
+          		$('#horaInicio').data("DateTimePicker").minDate(dateInicio).format("HH:mm");
+          		$('#horaInicio').data("DateTimePicker").maxDate(dateFin).format("HH:mm");
+          		
+          		$('#horaFin').data("DateTimePicker").minDate(dateInicio).format("HH:mm");
+          		$('#horaFin').data("DateTimePicker").maxDate(dateFin).format("HH:mm");
+          		
+          		$('#horaInicio').data("DateTimePicker").date(dateInicio);
+          		$('#horaFin').data("DateTimePicker").date(dateFin);
+      		}
+
       		
-      		$('#horaInicio').data("DateTimePicker").date(dateInicio);
-      		$('#horaFin').data("DateTimePicker").date(dateInicio);
+      		
+      		//Cuando esta en vista de Modificacion
+      		if($('#horaInicioMod').length){
+	      		$('#horaInicioMod').data("DateTimePicker").minDate(dateInicio).format("HH:mm");
+	      		$('#horaInicioMod').data("DateTimePicker").maxDate(dateFin).format("HH:mm");
+	      		
+	      		$('#horaFinMod').data("DateTimePicker").minDate(dateInicio).format("HH:mm");
+	      		$('#horaFinMod').data("DateTimePicker").maxDate(dateFin).format("HH:mm");
+	      		
+	      		$('#horaInicioMod').data("DateTimePicker").date(dateInicio);
+	      		$('#horaFinMod').data("DateTimePicker").date(dateFin);
+      		}
       		
       	});
 	}
@@ -142,6 +168,7 @@ ajaxCalls = (function(){
  	        	 if(res == true){
  		        	 $(".msg").addClass("alert alert-success").append("<strong>Anulaci&iacute;on realizada con exito</strong>");
  		        	 $('#'+turnoId).css("display","none");
+ 		        	 $('#mod_'+turnoId).css("display","none");
  	        	 }else{
  		        	 $(".msg").addClass("alert alert-danger").append("<strong>Error al realizar Anulaci&iacute;on</strong>");
  	        	 }

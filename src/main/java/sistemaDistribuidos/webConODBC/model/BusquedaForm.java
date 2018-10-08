@@ -78,4 +78,5 @@ public class BusquedaForm {
 	public LocalDateTime getFechahoraFin() {
 		return LocalDateTime.of(this.fechaAlquiler, this.horaFin);
 	}
+
 }

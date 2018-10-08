@@ -33,6 +33,7 @@
         <path d="M0,23 30,23" stroke="#000" stroke-width="5"/>
     </svg>
   </a>
+  <a class="navbar-brand" href="#">${titulo}</a>
 </nav>
  
 

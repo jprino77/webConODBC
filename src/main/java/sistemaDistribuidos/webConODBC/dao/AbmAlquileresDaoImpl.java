@@ -42,6 +42,8 @@ public class AbmAlquileresDaoImpl implements IAbmAlquileresDao {
 	private static final String insertTurno = "insert into turno (fecha_hora_solicitud, fecha_hora_desde, fecha_hora_hasta, cancha_id, usuario_id) values(?, ?, ?, ?,?)";
 
 	private static final String anularTurno = "update turno set cancelado = true where id = ?";
+	
+	private static final String modificarTurno = "update turno set fecha_hora_desde = ?, fecha_hora_hasta = ?, cancha_id = ? where id = ?";
 
 	@Override
 	public List<Filial> buscarFiliales(Connection con) throws SQLException {
@@ -126,13 +128,26 @@ public class AbmAlquileresDaoImpl implements IAbmAlquileresDao {
 	@Override
 	public void guardarOActualizarTurno(Turno turno, Connection con) throws SQLException {
 
-		PreparedStatement statement = con.prepareStatement(insertTurno);
+		PreparedStatement statement = null;
+		if(turno.getEsModificacion()) {
+			statement = con.prepareStatement(modificarTurno);
+			
+			statement.setTimestamp(1, Timestamp.valueOf(turno.getFechaHoraDesde()));
+			statement.setTimestamp(2, Timestamp.valueOf(turno.getFechaHoraHasta()));
+			statement.setInt(3, turno.getCancha().getId());
+			statement.setInt(4, turno.getId());
+			
+		}else {
+			statement = con.prepareStatement(insertTurno);
+			
+			statement.setTimestamp(1, Timestamp.valueOf(LocalDateTime.now()));
+			statement.setTimestamp(2, Timestamp.valueOf(turno.getFechaHoraDesde()));
+			statement.setTimestamp(3, Timestamp.valueOf(turno.getFechaHoraHasta()));
+			statement.setInt(4, turno.getCancha().getId());
+			statement.setInt(5, turno.getUsuario().getNumeroAfiliadoLegajo());
+		}
+		
 
-		statement.setTimestamp(1, Timestamp.valueOf(LocalDateTime.now()));
-		statement.setTimestamp(2, Timestamp.valueOf(turno.getFechaHoraDesde()));
-		statement.setTimestamp(3, Timestamp.valueOf(turno.getFechaHoraHasta()));
-		statement.setInt(4, turno.getCancha().getId());
-		statement.setInt(5, turno.getUsuario().getNumeroAfiliadoLegajo());
 
 		statement.execute();
 

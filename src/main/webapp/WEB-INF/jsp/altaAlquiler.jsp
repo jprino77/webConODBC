@@ -50,7 +50,7 @@
 
 					<div class='input-group date'>
 						<form:input path='fechaAlquiler' type='text'
-							class="form-control datepicker" />
+							class="form-control datepicker" onkeydown="return false" />
 						<span class="input-group-addon"> <span
 							class="glyphicon glyphicon-th"></span>
 						</span>
@@ -62,7 +62,7 @@
 					<label for="horaInicio">Hora inicio:</label>
 					<div class='input-group date'>
 						<form:input path='horaInicio' type='text'
-							class="form-control datetimepicker" />
+							class="form-control datetimepicker" onkeydown="return false" />
 						<span class="input-group-addon"> <span
 							class="glyphicon glyphicon-time"></span>
 						</span>
@@ -74,7 +74,7 @@
 					<label for="horaFin">Hora fin:</label>
 					<div class='input-group date'>
 						<form:input path='horaFin' type='text'
-							class="form-control datetimepicker" />
+							class="form-control datetimepicker" onkeydown="return false"/>
 						<span class="input-group-addon"> <span
 							class="glyphicon glyphicon-time"></span>
 						</span>

@@ -6,7 +6,7 @@
 
 <%@ include file="../jsp/bodyHeader.jsp"%>
 <div class="page-header">
-	<form:form action="/alquiler/bajaModificacionAlquiler" modelAttribute="busquedaForm">
+	<form:form action="/alquiler/bajaModificacionAlquiler" modelAttribute="busquedaForm" autocomplete="off">
 
 		<div class="row">
 			<div class="col-md-6">
@@ -35,10 +35,10 @@
 		<div class="row">
 			<div class="col-md-3">
 				<div class="form-group">
-					<label for="fechaAlquiler">Fecha Alquiler:</label>
+					<label for="fechaAlquiler">Fecha Alquiler Desde:</label>
 
 					<div class='input-group date'>
-						<form:input path='fechaAlquiler' type='text'
+						<form:input id="fechaAlquilerDesde" path='fechaAlquiler' type='text'
 							class="form-control datepicker" />
 						<span class="input-group-addon"> <span
 							class="glyphicon glyphicon-th"></span>
@@ -133,7 +133,7 @@
 
 											<button class="form-control btn btn-primary modificar"
 												value="Modificar" id='mod_${turno.id}' turno="${turno.id}"
-												data-toggle="modal" data-target="#myModal"
+												data-toggle="modal" data-target="#myModal" data-backdrop="static" data-keyboard="false"
 												<c:if test="${!turno.puedeAnular}"> disabled </c:if>>Modificar</button>
 										</div>
 										<div class="col-md-6">

@@ -1,6 +1,8 @@
 package sistemaDistribuidos.webConODBC.controller;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,39 +63,56 @@ public class AbmAlquilerController {
 
 	@RequestMapping(value = "/buscarCanchas", method = RequestMethod.GET)
 	public String buscarCanchasGet(Map<String, Object> model) {
+		model.put("titulo", "Alquilar");
 		return "altaAlquiler";
 	}
 
 	@RequestMapping(value = "/buscarCanchas", method = RequestMethod.POST)
-	public String buscarCanchasPost(Map<String, Object> model, @ModelAttribute("busquedaForm") BusquedaForm busquedaForm,
-			HttpServletRequest request) {
-		this.getCanchas(model, busquedaForm,false);
+	public String buscarCanchasPost(Map<String, Object> model,
+			@ModelAttribute("busquedaForm") BusquedaForm busquedaForm, HttpServletRequest request) {
+		model.put("titulo", "Alquilar");
+		this.getCanchas(model, busquedaForm, false);
 		this.getDepotesByFilialIdMap(model, busquedaForm.getFilial());
 		return "altaAlquiler";
 	}
-	
+
 	@RequestMapping(value = "/buscarCanchasMod", method = RequestMethod.POST)
-	public String buscarCanchasModPost(Map<String, Object> model, @ModelAttribute("busquedaForm") BusquedaForm busquedaForm,
-			HttpServletRequest request) {
-		this.getCanchas(model, busquedaForm,true);
+	public String buscarCanchasModPost(HttpServletResponse response, Map<String, Object> model,
+			@ModelAttribute("busquedaForm") BusquedaForm busquedaForm, HttpServletRequest request) {
+
+		LocalDateTime hoyAddOneHour = LocalDateTime.now().plusHours(2);
+		if (busquedaForm.getFechahoraInicio().equals(busquedaForm.getFechahoraFin())) {
+			model.put("msgResponse", "El horario de incio debe ser menor al horario fin");
+		} else if (hoyAddOneHour.isAfter(busquedaForm.getFechahoraInicio())) { // Valido que la fecha hora inicio
+																				// del alquiler sea menor a la hora
+																				// actual mas 2
+			model.put("msgResponse", "El horario de incio debe ser por lo menos 2 horas mayor a la hora actual");
+		} else {
+			List<Cancha> canchas = this.getCanchas(model, busquedaForm, true);
+
+			if (canchas.isEmpty()) {
+				model.put("msgResponse", "No se encontraron Canchas disponibles en esa fecha y hora");
+
+			}
+
+		}
+
 		return "datatableAlquiler";
 	}
 
 	@RequestMapping(value = "/bajaModificacionAlquiler", method = RequestMethod.GET)
 	public String bajaModificacionGet(Map<String, Object> model) {
-
-
+		model.put("titulo", "Baja/Modificacion");
 		return "bajaModificacionAlquiler";
 	}
-	
-	
-	@RequestMapping(value = "/bajaModificacionAlquiler", method = RequestMethod.POST)
-	public String bajaModificacionPost(Map<String, Object> model, @ModelAttribute("busquedaForm") BusquedaForm busquedaForm,
-			HttpServletRequest request) {
 
+	@RequestMapping(value = "/bajaModificacionAlquiler", method = RequestMethod.POST)
+	public String bajaModificacionPost(Map<String, Object> model,
+			@ModelAttribute("busquedaForm") BusquedaForm busquedaForm, HttpServletRequest request) {
+		model.put("titulo", "Baja/Modificacion");
 		Usuario u = securityService.getUsuarioLogeado();
 
-		List<Turno> turnos = abmService.getAlquileresUsuario(u.getNumeroAfiliadoLegajo(),busquedaForm);
+		List<Turno> turnos = abmService.getAlquileresUsuario(u.getNumeroAfiliadoLegajo(), busquedaForm);
 
 		if (turnos.isEmpty()) {
 			model.put("msg", "No se encontraron Alquileres para el usuario");
@@ -102,7 +121,7 @@ public class AbmAlquilerController {
 			model.put("turnos", turnos);
 		}
 		this.getDepotesByFilialIdMap(model, busquedaForm.getFilial());
-		
+
 		return "bajaModificacionAlquiler";
 	}
 
@@ -119,33 +138,28 @@ public class AbmAlquilerController {
 		return deportes;
 
 	}
-	
+
 	@RequestMapping(value = "/diasFilial", method = RequestMethod.POST)
 	@ResponseBody
 	public List<Integer> getDiasFilial(HttpServletResponse response, Map<String, Object> model,
 			@RequestParam int filialId) {
-		
-		List<Integer> diasFilial = abmService.buscarDiasInhabilitadosByFilialId(filialId);
 
+		List<Integer> diasFilial = abmService.buscarDiasInhabilitadosByFilialId(filialId);
 
 		return diasFilial;
 
 	}
-	
+
 	@RequestMapping(value = "/horasFilial", method = RequestMethod.POST)
 	@ResponseBody
 	public HorariosFilial getHorasFilial(HttpServletResponse response, Map<String, Object> model,
 			@RequestParam int filialId, @RequestParam @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate fechaAlquiler) {
-		
-		HorariosFilial horariosFilial = abmService.buscarHorasFilialByFilialId(filialId, fechaAlquiler).get(0);
 
+		HorariosFilial horariosFilial = abmService.buscarHorasFilialByFilialId(filialId, fechaAlquiler).get(0);
 
 		return horariosFilial;
 
 	}
-	
-	
-	
 
 	@RequestMapping(value = "/alquilar", method = RequestMethod.POST)
 	@ResponseBody
@@ -165,15 +179,33 @@ public class AbmAlquilerController {
 
 	}
 
-	private void getCanchas(Map<String, Object> model, BusquedaForm busquedaForm, boolean esModificacion) {
-		List<Cancha> canchas = abmService.buscarCanchasDisponibles(busquedaForm);
-		model.put("canchas", canchas);
-		model.put("esModificacion", esModificacion);
+	private List<Cancha> getCanchas(Map<String, Object> model, BusquedaForm busquedaForm, boolean esModificacion) {
 
-		if (canchas.isEmpty()) {
+		LocalDateTime hoyAddOneHour = LocalDateTime.now().plusHours(1);
+		List<Cancha> canchas = new ArrayList<Cancha>();
 
-			model.put("msg", "No se encontraron Canchas disponibles en esa fecha y hora");
+		if (busquedaForm.getFechahoraInicio().equals(busquedaForm.getFechahoraFin())) {
+			model.put("msg", "El horario de incio debe ser menor al horario fin");
+
+		} else if (hoyAddOneHour.isAfter(busquedaForm.getFechahoraInicio())) { // Valido que la fecha hora inicio del
+																				// alquiler sea menor a la hora actual
+																				// mas 1
+			model.put("msg", "El horario de incio debe ser por lo menos 1 hora mayor a la hora actual");
+		} else {
+			canchas = abmService.buscarCanchasDisponibles(busquedaForm);
+
+			model.put("canchas", canchas);
+			model.put("esModificacion", esModificacion);
+
+			if (canchas.isEmpty()) {
+
+				model.put("msg", "No se encontraron Canchas disponibles en esa fecha y hora");
+			}
 		}
+
+		model.put("busquedaForm", busquedaForm);
+
+		return canchas;
 
 	}
 

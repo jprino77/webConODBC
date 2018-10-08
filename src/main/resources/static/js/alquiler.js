@@ -18,7 +18,9 @@ $(function() {
 		var data = {
 				filialId : $("#filial").val()
 			};
-		ajaxCalls.getDiasDisabledFilial(data,"fechaAlquiler");
+		if($("#fechaAlquiler").length){
+			ajaxCalls.getDiasDisabledFilial(data,"fechaAlquiler");
+		}
 	}else{
 		$("#fechaAlquiler").attr("disabled", "disabled");
 	}
@@ -35,8 +37,9 @@ $(function() {
 				filialId : $("#filial").val(),
 				fechaAlquiler : this.value
 			};
-		
-		ajaxCalls.getHorasFilialDia(data);
+		if($("#fechaAlquiler").length){
+			ajaxCalls.getHorasFilialDia(data);
+		}
 		
 		$("#horaInicio").removeAttr("disabled");
 		$("#horaFin").removeAttr("disabled");
@@ -50,7 +53,9 @@ $(function() {
 			$("#fechaAlquiler").removeAttr("disabled");
 			//La funcion se encuentra en functionsHelper.js
 			ajaxCalls.getDeportesFilial(data);
-			ajaxCalls.getDiasDisabledFilial(data,"fechaAlquiler");
+			if($("#fechaAlquiler").length){
+				ajaxCalls.getDiasDisabledFilial(data,"fechaAlquiler");
+			}
 		} else {
 			$("#deporte").attr("disabled", "disabled");
 			$("#fechaAlquiler").attr("disabled", "disabled");
@@ -100,6 +105,36 @@ $(function() {
 
 	});
 	
+	
+	$("#fechaAlquilerMod").blur(function(){
+			
+			
+			if(this.value==""){
+				
+				$("#horaInicioMod").val("");
+				$("#horaFinMod").val("");
+				$("#horaInicioMod").attr("disabled","disabled");
+				$("#horaFinMod").attr("disabled","disabled");
+			
+			}else{
+				var data = {
+						filialId : $("#filialHidden").val(),
+						fechaAlquiler : this.value
+					};
+				
+				var filial = {
+						filialId : $("#filialHidden").val()
+					};
+				ajaxCalls.getDiasDisabledFilial(filial,"fechaAlquilerMod");
+				ajaxCalls.getHorasFilialDia(data);
+				
+				$("#horaInicioMod").removeAttr("disabled");
+				$("#horaFinMod").removeAttr("disabled");
+			}
+			
+	
+		});
+	
 	$("#horaInicio").blur(function(){
 		
 		if(this.value==""){
@@ -126,6 +161,15 @@ $(function() {
         $('#horaInicio').data("DateTimePicker").maxDate(e.date);
         habilitarConsulta();
     });
+    
+    
+    $("#horaInicioMod").on("dp.change", function (e) {
+        $('#horaFinMod').data("DateTimePicker").minDate(e.date);
+    });
+    
+    $("#horaFinMod").on("dp.change", function (e) {
+        $('#horaInicioMod').data("DateTimePicker").maxDate(e.date);
+    });
 
 	$('button[type=submit].alquilar').click(function(e) {
 
@@ -137,7 +181,8 @@ $(function() {
 		ajaxCalls.alquilar(callButtonId, formId)
 	});
 
-	$('button[type=submit].anular').click(function(e) {
+	//llamo funcion que genera el ajax para anular el turno
+	$('button[type=submit].anular').on('click', function(e) {
 
 		e.preventDefault();
 		var turnoId = this.id;
@@ -145,32 +190,38 @@ $(function() {
 		ajaxCalls.anular(turnoId);
 	});
 
-	$("button.modificar").click(function(e) {
+	//Paso valores al formulario que esta dentro del modal que aparece cuando apretamos elboton de modificar
+	$("#myModal").on("shown.bs.modal", function(e) {
 		e.preventDefault();
-		var filial = $('#filial_' + this.getAttribute("turno")).val();
-		var deporte = $('#deporte_' + this.getAttribute("turno")).val();
-		$('#fechaAlquilerMod').data("DateTimePicker").format("YYYY-MM-DD").date($('#fechaHoraDesde_' + this.getAttribute("turno")).val()).format("DD/MM/YYYY");
+		var element = e.relatedTarget
+		
+		var filial = $('#filial_' + element.getAttribute("turno")).val();
+		var deporte = $('#deporte_' + element.getAttribute("turno")).val();
+		$('#fechaAlquilerMod').data("DateTimePicker").format("YYYY-MM-DD").date($('#fechaHoraDesde_' + element.getAttribute("turno")).val()).format("DD/MM/YYYY").minDate(moment());
 		$("#filialHidden").val(filial);
 		$("#deporteHidden").val(deporte);
+		$("#turnoHidden").val(this.getAttribute("turno"));
 
 	});
 
 	$("#consultarMod").click(function(e) {
-
+		
 		e.preventDefault();
 		$.post("/alquiler/buscarCanchasMod", 
 				
 				$("#buscarcanchasMod").serialize(), function(data) {
 					$("#resultado").html(data);
 					$('#tableCanchas').DataTable();
-
+					$("[name=id]").val($("#turnoHidden").val());
 				});
 	});
 
+	//Cuando cierro modal borro datos de busqueda
 	$("#myModal").on("hidden.bs.modal", function() {
 		$("#resultado").html("");
 	});
 
+	//Habilito consulta de canchas en alta de alquiler
 	function habilitarConsulta(){
 		
 		if($("#deporte").val() != "0" && $("#filial").val() != "0" && $("#fechaAlquiler").val() !="" && $("#horaInicio").val() != "" && $("#horaFin").val() != ""){
