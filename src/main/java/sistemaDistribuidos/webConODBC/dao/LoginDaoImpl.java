@@ -10,6 +10,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
+import sistemaDistribuidos.webConODBC.entity.Localidad;
 import sistemaDistribuidos.webConODBC.entity.Rol;
 import sistemaDistribuidos.webConODBC.entity.Usuario;
 
@@ -23,7 +24,9 @@ public class LoginDaoImpl implements ILoginDao {
 												+ " inner join rol rol on u.rol_id = rol.id"
 												+ " inner join localidad l on l.id = u.localidad_id" 
 												+ " where u.usuario = ?";
-
+	
+	private static final String getLocalidades = "select id, nombre from localidad";
+	
 	@Override
 	public Usuario getByUsuario(String usuario, Connection con) throws SQLException {
 		List<Usuario> usuarioList = new ArrayList<Usuario>();
@@ -47,6 +50,28 @@ public class LoginDaoImpl implements ILoginDao {
 			usuarioList.add(u);
 		}
 		return usuarioList.get(0);
+	}
+	
+
+	@Override
+	public List<Localidad> getLocalidades(Connection con) throws SQLException {
+		List<Localidad> localidadList = new ArrayList<Localidad>();
+
+		PreparedStatement statement = con.prepareStatement(getLocalidades);
+
+		logger.info(statement.toString());
+		ResultSet rs = statement.executeQuery();
+
+		while (rs.next()) {
+			Localidad l= new Localidad();
+			Rol rol = new Rol();
+		
+			l.setId(rs.getInt("id"));
+			l.setNombre(rs.getString("nombre"));
+
+			localidadList.add(l);
+		}
+		return localidadList;
 	}
 
 }

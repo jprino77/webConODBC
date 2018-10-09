@@ -1,5 +1,4 @@
 package sistemaDistribuidos.webConODBC.entity;
-
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Collection;
@@ -9,6 +8,10 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.SpringSecurityCoreVersion;
 import org.springframework.security.core.userdetails.User;
@@ -33,15 +36,35 @@ public class Usuario implements UserDetails {
 	 * nulleables al ser objetoso admite null
 	 */
 	private Integer numeroAfiliadoLegajo;
+
+	@Size(min=1,message = "Campo obligatorio")
 	private String nombre;
+    
+	@Size(min=1,message = "Campo obligatorio")
 	private String calle;
+    
+    @NotNull(message = "Campo obligatorio")
 	private Integer altura;
-	private Localidad localidad;
+    
+    @NotNull(message = "Campo obligatorio")
+	private Integer localidad;
+    
+    @Size(min=1,message = "Campo obligatorio")
 	private String telefono;
+    
+    @Size(min=1,message = "Campo obligatorio")
 	private String email;
+    
+    @NotNull(message = "Campo obligatorio")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
 	private LocalDate fechaNAcimiento;
+    
+    @Size(min=1,message = "Campo obligatorio")
 	private String usuario;
+    
+    @Size(min=6, message = "Minimo 6 caracteres")
 	private String clave;
+    
 	private Rol rol;
 	private boolean activo;
 	private Set<GrantedAuthority> authorities;
@@ -93,11 +116,11 @@ public class Usuario implements UserDetails {
 		this.altura = altura;
 	}
 
-	public Localidad getLocalidad() {
+	public Integer getLocalidad() {
 		return localidad;
 	}
 
-	public void setLocalidad(Localidad localidad) {
+	public void setLocalidad(Integer localidad) {
 		this.localidad = localidad;
 	}
 
