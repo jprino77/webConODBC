@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import sistemaDistribuidos.webConODBC.dao.ILoginDao;
 import sistemaDistribuidos.webConODBC.entity.Localidad;
+import sistemaDistribuidos.webConODBC.entity.Usuario;
 
 @Service
 public class LoginServiceImpl implements ILoginService {
@@ -32,7 +33,7 @@ public class LoginServiceImpl implements ILoginService {
 	
 	@Override
 	public List<Localidad> getLocalidades() {
-		logger.info("Inico buscarFiliales");
+		logger.info("Inico getLocalidades");
 
 		List<Localidad> localidad = new ArrayList<Localidad>();
 		Connection con = null;
@@ -63,6 +64,79 @@ public class LoginServiceImpl implements ILoginService {
 			}
 		}
 		return localidad;
+	}
+	
+	
+	@Override
+	public boolean existeUsuario(String usuario) {
+		logger.info("Inico existeUsuario");
+		Connection con = null;
+		boolean existe = false;
+		try {
+			/**
+			 * Se abre coneccion aca porque dentro de un mismo servicio podrias tener
+			 * multiples llamados a daos de esta forma ahorras abrir varias y cerrar
+			 * conecciones por cada uno
+			 */
+			Class.forName(odbcDriver);
+			con = DriverManager.getConnection(db);
+
+			existe = loginDao.existeUsuario(usuario, con);
+
+		} catch (ClassNotFoundException e) {
+			logger.error("Eror al cargar driver");
+			e.printStackTrace();
+		} catch (SQLException e) {
+			logger.error("Eror al ejecutar query");
+			e.printStackTrace();
+		} finally {
+			try {
+				con.close();
+
+			} catch (SQLException e) {
+				logger.error("Eror al cerrar coneccion");
+				e.printStackTrace();
+			}
+		}
+		
+		return existe;
+	}
+	
+	
+	
+	@Override
+	public boolean crearUsuario(Usuario usuario) {
+		logger.info("Inico existeUsuario");
+		Connection con = null;
+		boolean exito = false;
+		try {
+			/**
+			 * Se abre coneccion aca porque dentro de un mismo servicio podrias tener
+			 * multiples llamados a daos de esta forma ahorras abrir varias y cerrar
+			 * conecciones por cada uno
+			 */
+			Class.forName(odbcDriver);
+			con = DriverManager.getConnection(db);
+
+			exito=  loginDao.crearUsuario(usuario, con);
+
+		} catch (ClassNotFoundException e) {
+			logger.error("Eror al cargar driver");
+			e.printStackTrace();
+		} catch (SQLException e) {
+			logger.error("Eror al ejecutar query");
+			e.printStackTrace();
+		} finally {
+			try {
+				con.close();
+
+			} catch (SQLException e) {
+				logger.error("Eror al cerrar coneccion");
+				e.printStackTrace();
+			}
+		}
+		
+		return exito;
 	}
 
 

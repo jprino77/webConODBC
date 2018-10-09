@@ -1,18 +1,20 @@
 $(function() {
 
 	//La funcion se encuentra en functionsHelper.js
+	//inicializo datepickers y datetables para que funcionen como tales
 	customDatePicker.init();
 	$('#table_id').DataTable();
 	$('#tableCanchas').DataTable();
 	habilitarConsulta();
 
-
+//corroboro si al rederizar la pagina el dropdown de deporte viene con datos si esta vacio lo deshabilito
 	if ($("#deporte").val() != "0") {
 		$("#deporte").removeAttr("disabled");
 	} else {
 		$("#deporte").attr("disabled", "disabled")
 	}
 	
+	//chequeo si al renderizar la pagina ya me viene seteada una filial si es asi habilito el dropdown de deporte y el datepicker de fecha de alquiler
 	if ($("#filial").val() != "0") {
 		
 		var data = {
@@ -110,7 +112,7 @@ $(function() {
 			
 			
 			if(this.value==""){
-				
+				//deshabilito los datepicker de hora si no tengo fecha seleccionado
 				$("#horaInicioMod").val("");
 				$("#horaFinMod").val("");
 				$("#horaInicioMod").attr("disabled","disabled");
@@ -125,9 +127,12 @@ $(function() {
 				var filial = {
 						filialId : $("#filialHidden").val()
 					};
+				//buco los dias que se van a deshabilitar en el calendario
 				ajaxCalls.getDiasDisabledFilial(filial,"fechaAlquilerMod");
+				//busco la hora de apertura y cierre de la filial
 				ajaxCalls.getHorasFilialDia(data);
 				
+				//habilito los datepicker de hora
 				$("#horaInicioMod").removeAttr("disabled");
 				$("#horaFinMod").removeAttr("disabled");
 			}
@@ -151,7 +156,7 @@ $(function() {
 			habilitarConsulta();
 	});
 	
-	
+	// inicio Cambio fecha minima y maxima que permiten los datepicker enfuncion del que le corresponda por ejemplo el de hora desde hasta
     $("#horaInicio").on("dp.change", function (e) {
         $('#horaFin').data("DateTimePicker").minDate(e.date);
         habilitarConsulta();
@@ -170,8 +175,18 @@ $(function() {
     $("#horaFinMod").on("dp.change", function (e) {
         $('#horaInicioMod').data("DateTimePicker").maxDate(e.date);
     });
+    
+    $("#fechaAlquilerDesde").on("dp.change", function (e) {
+        $('#fechaAlquilerHasta').data("DateTimePicker").minDate(e.date);
+    });
+    
+    $("#fechaAlquilerHasta").on("dp.change", function (e) {
+        $('#fechaAlquilerDesde').data("DateTimePicker").maxDate(e.date);
+    });
 
-	$('button[type=submit].alquilar').click(function(e) {
+ // fin Cambio fecha minima y maxima que permiten los datepicker enfuncion del que le corresponda por ejemplo el de hora desde hasta
+	
+    $('button[type=submit].alquilar').click(function(e) {
 
 		//Prevent default submission of form
 		e.preventDefault();
@@ -190,7 +205,7 @@ $(function() {
 		ajaxCalls.anular(turnoId);
 	});
 
-	//Paso valores al formulario que esta dentro del modal que aparece cuando apretamos elboton de modificar
+	//Paso valores al formulario que esta dentro del modal que aparece cuando apretamos el boton de modificar
 	$("#myModal").on("shown.bs.modal", function(e) {
 		e.preventDefault();
 		var element = e.relatedTarget
@@ -204,6 +219,7 @@ $(function() {
 
 	});
 
+	//busco canchas a modificar y se rendeiza datatable
 	$("#consultarMod").click(function(e) {
 		
 		e.preventDefault();

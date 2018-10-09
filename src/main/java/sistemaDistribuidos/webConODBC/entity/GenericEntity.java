@@ -1,5 +1,8 @@
 package sistemaDistribuidos.webConODBC.entity;
-
+/**
+ * Entidad que sirve de base por tener datos comunes a varias tablas
+ *
+ */
 public abstract class GenericEntity {
 	
 	private Integer id;

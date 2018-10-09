@@ -1,4 +1,5 @@
 package sistemaDistribuidos.webConODBC.entity;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Collection;
@@ -22,14 +23,12 @@ import org.springframework.util.Assert;
  * Se extiende funcionalidad de UserDetails para uso de Spring Security y
  * quedarse con todos los datos del usuario despues del logueo
  * 
- * @author Julian
  *
+ * @size @NotNull se utiliza para las validaciones de formulario que aparecen
+ *       ante error
  */
 public class Usuario implements UserDetails {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	/**
 	 * atributo Objetoso y no primitivo, porque como es una entidad con campos
@@ -37,34 +36,45 @@ public class Usuario implements UserDetails {
 	 */
 	private Integer numeroAfiliadoLegajo;
 
-	@Size(min=1,message = "Campo obligatorio")
+	@Size(min = 1, message = "Campo obligatorio")
 	private String nombre;
-    
-	@Size(min=1,message = "Campo obligatorio")
+
+	@Size(min = 1, message = "Campo obligatorio")
+	private String apellido;
+
+	public String getApellido() {
+		return apellido;
+	}
+
+	public void setApellido(String apellido) {
+		this.apellido = apellido;
+	}
+
+	@Size(min = 1, message = "Campo obligatorio")
 	private String calle;
-    
-    @NotNull(message = "Campo obligatorio")
+
+	@NotNull(message = "Campo obligatorio")
 	private Integer altura;
-    
-    @NotNull(message = "Campo obligatorio")
+
+	@NotNull(message = "Campo obligatorio")
 	private Integer localidad;
-    
-    @Size(min=1,message = "Campo obligatorio")
+
+	@Size(min = 1, message = "Campo obligatorio")
 	private String telefono;
-    
-    @Size(min=1,message = "Campo obligatorio")
+
+	@Size(min = 1, message = "Campo obligatorio")
 	private String email;
-    
-    @NotNull(message = "Campo obligatorio")
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
+
+	@NotNull(message = "Campo obligatorio")
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private LocalDate fechaNAcimiento;
-    
-    @Size(min=1,message = "Campo obligatorio")
+
+	@Size(min = 6, message = "Minimo 4 caracteres")
 	private String usuario;
-    
-    @Size(min=6, message = "Minimo 6 caracteres")
+
+	@Size(min = 6, message = "Minimo 6 caracteres")
 	private String clave;
-    
+
 	private Rol rol;
 	private boolean activo;
 	private Set<GrantedAuthority> authorities;

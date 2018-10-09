@@ -72,6 +72,49 @@ DELIMITER ;
 
 
 
+USE `db_los_amigos`;
+DROP procedure IF EXISTS `CREAR_USUARIO`;
+
+DELIMITER $$
+USE `db_los_amigos`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CREAR_USUARIO` (IN p_nombre varchar(45), IN p_apellido varchar(45), IN p_calle varchar(100), IN p_altura int, IN p_localidad_id int, IN p_telefono varchar(15), IN p_email varchar(100), IN p_fecha_nacimieto date, IN p_usuario varchar(45), IN p_clave varchar(45), IN p_perfil_codigo varchar(2))
+BEGIN
+
+INSERT INTO `db_los_amigos`.`usuario`
+(`nombre`,
+`apellido`,
+`calle`,
+`altura`,
+`localidad_id`,
+`telefono`,
+`email`,
+`fecha_nacimieto`,
+`usuario`,
+`clave`,
+`rol_id`,
+`activo`)
+VALUES
+(p_nombre ,
+p_apellido ,
+p_calle ,
+p_altura ,
+p_localidad_id ,
+p_telefono ,
+p_email ,
+p_fecha_nacimieto ,
+p_usuario ,
+p_clave ,
+(select id from rol where codigo = p_perfil_codigo),
+1 );
+END$$
+
+DELIMITER ;
+
+
+
+
+
+
 
 
 

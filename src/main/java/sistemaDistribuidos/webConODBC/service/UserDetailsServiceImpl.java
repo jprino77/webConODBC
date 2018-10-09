@@ -19,6 +19,10 @@ import org.springframework.stereotype.Service;
 import sistemaDistribuidos.webConODBC.dao.ILoginDao;
 import sistemaDistribuidos.webConODBC.entity.Usuario;
 
+/**
+ * Implementacion de filtro de seguridad para el logueo del usuario
+ *
+ */
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
@@ -72,20 +76,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 		logger.info("Found User: " + usuario.getUsuario());
 
-		// [ROLE_USER, ROLE_ADMIN,..]
-//		List<String> roleNames = this.appRoleDAO.getRoleNames(appUser.getUserId());
-
 		List<GrantedAuthority> grantList = new ArrayList<GrantedAuthority>();
-//		if (roleNames != null) {
-//			for (String role : roleNames) {
-				// ROLE_USER, ROLE_ADMIN,..
-				GrantedAuthority authority = new SimpleGrantedAuthority("afiliado");
-				grantList.add(authority);
-//			}
-//		}
+		GrantedAuthority authority = new SimpleGrantedAuthority("afiliado");
+		grantList.add(authority);
 
 		usuario.setAuthorities(grantList);
-		
 
 		return usuario;
 	}

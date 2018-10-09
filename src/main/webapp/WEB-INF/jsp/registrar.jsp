@@ -20,16 +20,32 @@
 
 <body>
 	<div class="container wrapper">
+
 		<form:form action="/registrar" modelAttribute="usuario" method="POST"
 			class="form-content" autocomplete="off">
-
 			<div class="row">
-				<div class="col-md-8">
+				<c:if test="${not empty msg}">
+					<div class="alert alert-info">
+						<strong>${msg}</strong>
+					</div>
+				</c:if>
+			</div>
+			<div class="row">
+				<div class="col-md-4">
 					<div class="form-group">
-						<form:label path="nombre">Nombre Completo:</form:label>
+						<form:label path="nombre">Nombre:</form:label>
 						<form:input path='nombre' type='text' class="form-control"
-							cssErrorClass="form-control error" />
+							cssErrorClass="form-control error" maxlength="45" />
 						<form:errors path="nombre" cssClass="error" />
+
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group">
+						<form:label path="apellido">Apellido:</form:label>
+						<form:input path='apellido' type='text' class="form-control"
+							cssErrorClass="form-control error" maxlength="45" />
+						<form:errors path="apellido" cssClass="error" />
 
 					</div>
 				</div>
@@ -38,10 +54,11 @@
 						<form:label path="fechaNAcimiento" for="fechaNAcimiento">Fecha Nacimiento:</form:label>
 
 						<div class='input-group date'>
-							<form:input id="fechaNAcimiento datepicker" path='fechaNAcimiento'
-								type='text' class="form-control datepicker"
-								onkeydown="return false" cssErrorClass="form-control datepicker error" />
-								
+							<form:input id="fechaNAcimiento datepicker"
+								path='fechaNAcimiento' type='text'
+								class="form-control datepicker" onkeydown="return false"
+								cssErrorClass="form-control datepicker error" />
+
 							<span class="input-group-addon"> <span
 								class="glyphicon glyphicon-th"></span>
 							</span>
@@ -57,14 +74,14 @@
 					<div class="form-group">
 						<form:label path='calle' for="calle">calle:</form:label>
 						<form:input path='calle' type='text' class="form-control"
-							cssErrorClass="form-control error" />
+							maxlength="100" cssErrorClass="form-control error" />
 						<form:errors path="calle" cssClass="error" />
 					</div>
 				</div>
 				<div class="col-md-2">
 					<div class="form-group">
 						<form:label path='altura' for="altura">Altura:</form:label>
-						<form:input path='altura' type="number"    class="form-control"
+						<form:input path='altura' type="number" class="form-control"
 							cssErrorClass="form-control error" />
 						<form:errors path="altura" cssClass="error" />
 
@@ -88,8 +105,8 @@
 				<div class="col-md-6">
 					<div class="form-group">
 						<form:label path='telefono' for="altura">Telefono:</form:label>
-						<form:input path='telefono' type='text' class="form-control"
-							cssErrorClass="form-control error" />
+						<form:input path='telefono' type='tel' class="form-control"
+							cssErrorClass="form-control error" maxlength="15" />
 						<form:errors path="telefono" cssClass="error" />
 
 					</div>
@@ -99,7 +116,7 @@
 					<div class="form-group">
 						<form:label path='email' for="altura">Email:</form:label>
 						<form:input path='email' type='email' class="form-control"
-							cssErrorClass="form-control error" />
+							cssErrorClass="form-control error" maxlength="100" />
 						<form:errors path="email" cssClass="error" />
 					</div>
 
@@ -111,7 +128,7 @@
 					<div class="form-group">
 						<form:label path='usuario' for="altura">Usuario:</form:label>
 						<form:input path='usuario' type='text' class="form-control"
-							cssErrorClass="form-control error" />
+							maxlength="45" cssErrorClass="form-control error" />
 						<form:errors path="usuario" cssClass="error" />
 
 					</div>
@@ -120,8 +137,8 @@
 				<div class="col-md-6">
 					<div class="form-group">
 						<form:label path='clave' for="clave">Clave:</form:label>
-						<form:input path='clave' type='text' class="form-control"
-							cssErrorClass="form-control error" />
+						<form:input path='clave' type='password' class="form-control"
+							maxlength="45" cssErrorClass="form-control error" />
 						<form:errors path="clave" cssClass="error" />
 
 					</div>

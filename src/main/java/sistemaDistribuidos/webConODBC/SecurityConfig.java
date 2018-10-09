@@ -43,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 		// Config for Login Form
 		http.authorizeRequests().and().formLogin()//
-				.loginProcessingUrl("/j_spring_security_check").loginPage("/login").defaultSuccessUrl("/inicio")//
+				.loginProcessingUrl("/j_spring_security_check").loginPage("/login").defaultSuccessUrl("/alquiler/buscarCanchas")//
 				.failureUrl("/login?error=true")//
 				.usernameParameter("usuario")//
 				.passwordParameter("clave").and().logout().logoutUrl("/logout").logoutSuccessUrl("/login");

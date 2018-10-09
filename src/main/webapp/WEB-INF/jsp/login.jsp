@@ -45,7 +45,8 @@
 				<input type="password" id="password"
 					class="third" name='clave' placeholder="clave" /> 
 				<input
-					type="submit" class="fourth" value="Ingresar" /> 
+					type="submit" class="fourth" value="Ingresar" />
+				<a href="/registrar">Crear Cuenta </a>
 				<input
 					type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 			</form>

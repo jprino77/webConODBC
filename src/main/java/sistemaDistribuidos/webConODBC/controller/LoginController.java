@@ -59,14 +59,10 @@ public class LoginController {
 		if (logout != null) {
 			model.put("msg", "Deslogueado con exito");
 		}
+		
 
 		return "login";
 
-	}
-
-	@RequestMapping(value = "/inicio", method = RequestMethod.GET)
-	public String inicio(Map<String, Object> model) {
-		return "inicio";
 	}
 
 	@RequestMapping(value = "/registrar", method = RequestMethod.GET)
@@ -78,6 +74,19 @@ public class LoginController {
 	@RequestMapping(value = "/registrar", method = RequestMethod.POST)
 	public String registrarPost(Map<String, Object> model, @Valid Usuario usuario, BindingResult bindingResult) {
 		this.getLocalidadMap(model);
+		
+		 if(loginService.existeUsuario(usuario.getUsuario())) {
+			 bindingResult.rejectValue("usuario","error.usuario","Usuario existente");
+		 }
+		
+		 if(!bindingResult.hasErrors()) {
+			 
+			 loginService.crearUsuario(usuario);
+			 model.put("msg", "Registro realizado exito  <a href='/login'>ir al login</a>");
+			 model.put("usuario", new Usuario());
+
+		 }
+		 
 		return "registrar";
 	}
 

@@ -20,7 +20,6 @@
 
 <div id="sideNavigation" class="sidenav">
   <a id="cerrar" href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-  <a href="/inicio">Home</a>
   <a href="/alquiler/buscarCanchas">Alquilar Cancha</a>
  <a href="/alquiler/bajaModificacionAlquiler">Baja/Modificacionde alquiler</a>
 </div>
