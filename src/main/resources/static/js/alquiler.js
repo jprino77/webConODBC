@@ -215,7 +215,7 @@ $(function() {
 		$('#fechaAlquilerMod').data("DateTimePicker").format("YYYY-MM-DD").date($('#fechaHoraDesde_' + element.getAttribute("turno")).val()).format("DD/MM/YYYY").minDate(moment());
 		$("#filialHidden").val(filial);
 		$("#deporteHidden").val(deporte);
-		$("#turnoHidden").val(this.getAttribute("turno"));
+		$("#turnoHidden").val(element.getAttribute("turno"));
 
 	});
 

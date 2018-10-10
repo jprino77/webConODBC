@@ -9,7 +9,7 @@
 <script src="http://localhost:8080/js/sidebar.js"></script>
 <script src="http://localhost:8080/js/functionsHelper.js"></script>
 
-<script src="http://localhost:8080/js/alquiler.js?20181008"></script>
+<script src="http://localhost:8080/js/alquiler.js?20181010"></script>
 
 </body>
 
