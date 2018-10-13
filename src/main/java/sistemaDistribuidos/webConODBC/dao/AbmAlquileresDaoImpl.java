@@ -196,7 +196,7 @@ public class AbmAlquileresDaoImpl implements IAbmAlquileresDao {
 
 			tipoCancha.setDescripcion(rs.getString("tipo_cancha_descripcion"));
 
-			deporte.setId(rs.getInt("cancha_id"));
+			deporte.setId(rs.getInt("deporte_id"));
 			deporte.setDescripcion(rs.getString("deporte_descripcion"));
 
 			filial.setId(rs.getInt("filial_id"));
