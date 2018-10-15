@@ -48,6 +48,10 @@ $(function() {
 	}
 	
 	$("#filial").change(function() {
+		//Limpio DropDown de deportes cada vez que cambio la Filial (evito que se dupliquen datos en el mismo)
+		$("#deporte").val("0");
+		$("#deporte").find('option').not(':first').remove();
+		
 		if (this.value != "0") {
 			var data = {
 				filialId : this.value
@@ -68,9 +72,6 @@ $(function() {
 			$("#horaInicio").val("");
 			$("#horaFin").val("");
 
-			$("#deporte").val("0");
-			$("#deporte").find('option').not(':first').remove();
-
 		}
 		
 		habilitarConsulta();
@@ -81,7 +82,7 @@ $(function() {
 		habilitarConsulta();
 	});
 	
-	$("#fechaAlquiler").blur(function(){
+	$("#fechaAlquiler").on("dp.change",function(){
 		
 		
 		if(this.value==""){
@@ -108,7 +109,7 @@ $(function() {
 	});
 	
 	
-	$("#fechaAlquilerMod").blur(function(){
+	$("#fechaAlquilerMod").on("dp.change", function(){
 			
 			
 			if(this.value==""){
@@ -135,6 +136,8 @@ $(function() {
 				//habilito los datepicker de hora
 				$("#horaInicioMod").removeAttr("disabled");
 				$("#horaFinMod").removeAttr("disabled");
+				$("#consultarMod").removeAttr("disabled");
+				
 			}
 			
 	
@@ -212,11 +215,30 @@ $(function() {
 		
 		var filial = $('#filial_' + element.getAttribute("turno")).val();
 		var deporte = $('#deporte_' + element.getAttribute("turno")).val();
-		$('#fechaAlquilerMod').data("DateTimePicker").format("YYYY-MM-DD").date($('#fechaHoraDesde_' + element.getAttribute("turno")).val()).format("DD/MM/YYYY").minDate(moment());
+		
 		$("#filialHidden").val(filial);
 		$("#deporteHidden").val(deporte);
 		$("#turnoHidden").val(element.getAttribute("turno"));
+		$('#horaInicioMod').attr("disabled","disabled");
+		$('#horaFinMod').attr("disabled","disabled");
+		$('#consultarMod').attr("disabled","disabled");
+		
+		var filial = {
+				filialId : filial
+			};
+		
+		ajaxCalls.getDiasDisabledFilial(filial,"fechaAlquilerMod");
 
+	});
+	
+	
+	//Limpio campos al cerrarse el modal
+	$("#myModal").on("hidden.bs.modal", function() {
+		$("#resultado").html("");
+		$('#fechaAlquilerMod').val("");
+		
+  		$('#horaInicioMod').val("");
+  		$('#horaFinMod').val("");
 	});
 
 	//busco canchas a modificar y se rendeiza datatable
@@ -232,10 +254,6 @@ $(function() {
 				});
 	});
 
-	//Cuando cierro modal borro datos de busqueda
-	$("#myModal").on("hidden.bs.modal", function() {
-		$("#resultado").html("");
-	});
 
 	//Habilito consulta de canchas en alta de alquiler
 	function habilitarConsulta(){

@@ -14,7 +14,7 @@ customDatePicker = (function () {
 				format: 'DD/MM/YYYY',
 			    locale: 'es',
 			    useCurrent: false,
-			    minDate: moment(),
+			    minDate: moment().startOf('day')
 			    
 			});
 			
